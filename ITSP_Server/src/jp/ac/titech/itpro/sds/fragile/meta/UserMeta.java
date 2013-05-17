@@ -1,6 +1,6 @@
 package jp.ac.titech.itpro.sds.fragile.meta;
 
-//@javax.annotation.Generated(value = { "slim3-gen", "@VERSION@" }, date = "2013-05-17 12:30:33")
+//@javax.annotation.Generated(value = { "slim3-gen", "@VERSION@" }, date = "2013-05-17 15:10:35")
 /** */
 public final class UserMeta extends org.slim3.datastore.ModelMeta<jp.ac.titech.itpro.sds.fragile.model.User> {
 
