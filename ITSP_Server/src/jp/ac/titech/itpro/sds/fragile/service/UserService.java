@@ -27,12 +27,12 @@ public class UserService {
         return user;
     }
 
-    public static List<User> getUserByEmail(String email) {
+    public static User getUserByEmail(String email) {
         try {
             return Datastore
                 .query(meta)
                 .filter(meta.email.equal(email))
-                .asList();
+                .asSingle();
         } catch (Exception e) {
             return null;
         }
