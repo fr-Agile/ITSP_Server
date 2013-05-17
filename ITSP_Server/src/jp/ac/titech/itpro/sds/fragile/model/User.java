@@ -11,8 +11,6 @@ import org.slim3.datastore.Model;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    
     
     @Attribute(name = "fN")
     private String firstName;
@@ -132,5 +130,8 @@ public class User implements Serializable {
         this.password = password;
     }
     
+    public String getUserName() {
+        return lastName + " " + firstName;
+    }
     
 }
