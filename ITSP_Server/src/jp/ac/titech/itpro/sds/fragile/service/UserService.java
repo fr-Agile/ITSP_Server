@@ -1,6 +1,6 @@
 package jp.ac.titech.itpro.sds.fragile.service;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import jp.ac.titech.itpro.sds.fragile.meta.UserMeta;
@@ -16,7 +16,7 @@ import com.google.appengine.api.datastore.Transaction;
 public class UserService {
     private static UserMeta meta = UserMeta.get();
 
-    public static User createUser(Map<String, Object> input) {
+    private static User createUser(Map<String, Object> input) {
         User user = new User();
         Key key = Datastore.allocateId(User.class);
         BeanUtil.copy(input, user);
@@ -25,6 +25,19 @@ public class UserService {
         Datastore.put(user);
         tx.commit();
         return user;
+    }
+    
+    public static User createUser(String firstName, String lastName, String email, String password) {
+        String encryptedPass = Encrypter.getHash(password);
+        if(encryptedPass == null) {
+            return null;
+        }
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("firstName", firstName);
+        map.put("lastName", lastName);
+        map.put("email", email);
+        map.put("password", encryptedPass);
+        return createUser(map);
     }
 
     public static User getUserByEmail(String email) {
