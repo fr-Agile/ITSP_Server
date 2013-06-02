@@ -1,6 +1,5 @@
 package jp.ac.titech.itpro.sds.fragile.api;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -25,8 +24,8 @@ public class ScheduleV1EndPoint {
     private static String FAIL = "fail";
     
     public ScheduleResultV1Dto createSchedule(
-            @Named("startTime") Date startTime,
-            @Named("finishTime") Date finishTime){
+            @Named("startTime") String startTime,
+            @Named("finishTime") String finishTime){
         
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
         

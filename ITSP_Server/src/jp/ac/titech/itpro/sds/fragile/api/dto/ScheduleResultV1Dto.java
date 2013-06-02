@@ -1,7 +1,5 @@
 package jp.ac.titech.itpro.sds.fragile.api.dto;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 
 /**
@@ -12,9 +10,9 @@ public class ScheduleResultV1Dto {
     
     private String result;
     
-    private Date startTime; 
+    private String startTime; 
 
-    private Date finishTime; 
+    private String finishTime; 
     
     public String getResult() {
         return result;
@@ -24,19 +22,19 @@ public class ScheduleResultV1Dto {
         this.result = result;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
     
-    public Date getFinishTime() {
+    public String getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(Date finishTime) {
+    public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
     }
 }
