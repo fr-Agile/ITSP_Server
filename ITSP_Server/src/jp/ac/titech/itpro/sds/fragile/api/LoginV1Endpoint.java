@@ -1,6 +1,5 @@
 package jp.ac.titech.itpro.sds.fragile.api;
 
-
 import java.util.logging.Logger;
 
 import javax.inject.Named;
@@ -16,13 +15,14 @@ import com.google.api.server.spi.config.Api;
  */
 @Api(name = "loginEndpoint", version = "v1")
 public class LoginV1Endpoint {
-    private final static Logger logger = Logger.getLogger(LoginV1Endpoint.class
-        .getName());
+    private final static Logger logger = Logger.getLogger(
+        LoginV1Endpoint.class.getName());
 
     private static String SUCCESS = "success";
     private static String FAIL = "fail";
 
-    public LoginResultV1Dto login(@Named("email") String email,
+    public LoginResultV1Dto login(
+            @Named("email") String email,
             @Named("password") String password) {
 
         LoginResultV1Dto result = new LoginResultV1Dto();

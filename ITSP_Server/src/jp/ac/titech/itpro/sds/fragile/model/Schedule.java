@@ -8,7 +8,7 @@ import org.slim3.datastore.Model;
 
 import com.google.appengine.api.datastore.Key;
 
-@Model(schemaVersion = 1)
+@Model(schemaVersion = 1, kind = "sched")
 public class Schedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,35 +22,11 @@ public class Schedule implements Serializable {
     @Attribute(name = "sT")
     private Date startTime;
     
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
     @Attribute(name = "fT")
     private Date finishTime;
 
-    public Date getFinishTime() {
-        return finishTime;
-    }
-
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
-    }
-
-    public Boolean getRepeat() {
-        return repeat;
-    }
-
-    public void setRepeat(Boolean repeat) {
-        this.repeat = repeat;
-    }
-
     @Attribute(name = "rp")
-    private Boolean repeat;
+    private Boolean isRepeat;
     
     /**
      * Returns the key.
@@ -90,6 +66,63 @@ public class Schedule implements Serializable {
         this.version = version;
     }
 
+    /**
+     * Returns the start time.
+     *
+     * @return the start time
+     */
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * Sets the start time.
+     *
+     * @param startTime
+     *            the start time
+     */
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+    
+    /**
+     * Returns the finish time.
+     *
+     * @return the finish time
+     */
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    /**
+     * Sets the finish time.
+     *
+     * @param finishTime
+     *            the finish time
+     */
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+    
+    /**
+     * Returns whether a schedule is repeated or not.
+     *
+     * @return whether a schedule is repeated or not.
+     */
+    public Boolean getIsRepeat() {
+        return isRepeat;
+    }
+
+    /**
+     * Sets whether a scheuld is repeated or not.
+     *
+     * @param isRepeat
+     *            whether a schedule is repeated or not.
+     */
+    public void setIsRepeat(Boolean isRepeat) {
+        this.isRepeat = isRepeat;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -103,13 +136,17 @@ public class Schedule implements Serializable {
         if (this == obj) {
             return true;
         }
+        
         if (obj == null) {
             return false;
         }
+        
         if (getClass() != obj.getClass()) {
             return false;
         }
+        
         Schedule other = (Schedule) obj;
+        
         if (key == null) {
             if (other.key != null) {
                 return false;
@@ -117,6 +154,7 @@ public class Schedule implements Serializable {
         } else if (!key.equals(other.key)) {
             return false;
         }
+        
         return true;
     }
 

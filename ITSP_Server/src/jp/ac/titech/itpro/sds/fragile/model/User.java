@@ -81,13 +81,17 @@ public class User implements Serializable {
         if (this == obj) {
             return true;
         }
+        
         if (obj == null) {
             return false;
         }
+        
         if (getClass() != obj.getClass()) {
             return false;
         }
+        
         User other = (User) obj;
+        
         if (key == null) {
             if (other.key != null) {
                 return false;
@@ -95,6 +99,7 @@ public class User implements Serializable {
         } else if (!key.equals(other.key)) {
             return false;
         }
+        
         return true;
     }
 

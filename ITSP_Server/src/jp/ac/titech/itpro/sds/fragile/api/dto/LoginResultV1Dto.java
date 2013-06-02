@@ -19,7 +19,7 @@ public class LoginResultV1Dto {
         return email;
     }
 
-    public void setMail(String mail) {
+    public void setMail(String email) {
         this.email = email;
     }
 
