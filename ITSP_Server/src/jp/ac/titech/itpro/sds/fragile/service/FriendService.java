@@ -28,23 +28,38 @@ public class FriendService {
         tx.commit();
         return friend;
     }
+    
+    public static boolean isFriend(Key from, Key to) {
+        try {
+            if (Datastore
+                .query(meta)
+                .filter(meta.friendFrom.equal(from), meta.friendTo.equal(to))
+                .count() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-    public static List<Friend> getFriendToList(Key to) {
+    public static List<Friend> getFriendToList(Key a) {
         try {
             return Datastore
                 .query(meta)
-                .filter(meta.friendFrom.equal(to))
+                .filter(meta.friendFrom.equal(a))
                 .asList();
         } catch (Exception e) {
             return null;
         }
     }
     
-    public static List<Friend> getFriendFromList(Key from) {
+    public static List<Friend> getFriendFromList(Key a) {
         try {
             return Datastore
                 .query(meta)
-                .filter(meta.friendTo.equal(from))
+                .filter(meta.friendTo.equal(a))
                 .asList();
         } catch (Exception e) {
             return null;
