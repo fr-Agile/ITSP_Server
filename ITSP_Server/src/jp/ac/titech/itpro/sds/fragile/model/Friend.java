@@ -6,22 +6,18 @@ import com.google.appengine.api.datastore.Key;
 
 import org.slim3.datastore.Attribute;
 import org.slim3.datastore.Model;
+import org.slim3.datastore.ModelRef;
 
 @Model(schemaVersion = 1)
 public class Friend implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    //メールアドレスによる検索の実装
+    @Attribute(name = "fF")
+    private  ModelRef<User> friendFrom;
     
-    @Attribute(name = "fRA")
-    private String friendA;
-    
-    @Attribute(name = "fRB")
-    private String friendB;
-    
-    @Attribute(name = "fS")
-    private boolean friendShip;
+    @Attribute(name = "fT")
+    private  ModelRef<User> friendTo;
 
     @Attribute(primaryKey = true)
     private Key key;
@@ -38,41 +34,16 @@ public class Friend implements Serializable {
         return key;
     }
 
-    /**
-     * Sets the key.
-     *
-     * @param key
-     *            the key
-     */
     public void setKey(Key key) {
         this.key = key;
     }
-
-    /**
-     * Returns the version.
-     *
-     * @return the version
-     */
+    
     public Long getVersion() {
         return version;
     }
 
-    /**
-     * Sets the version.
-     *
-     * @param version
-     *            the version
-     */
     public void setVersion(Long version) {
         this.version = version;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((key == null) ? 0 : key.hashCode());
-        return result;
     }
 
     @Override
@@ -96,28 +67,12 @@ public class Friend implements Serializable {
         }
         return true;
     }
-    
-    public String getFriendA() {
-        return friendA;
+
+    public ModelRef<User> getFriendFrom() {
+        return friendFrom;
     }
-    
-    public String getFriendB() {
-        return friendB;
-    }
-    
-    public boolean getFriendShip() {
-        return friendShip;
-    }
-    
-    public void setFriendA(String friendA) {
-        this.friendA = friendA;
-    }
-    
-    public void setFriendB(String friendB) {
-        this.friendB = friendB;
-    }
-    
-    public void setFriendShip(boolean friendShip) {
-        this.friendShip = friendShip;
+
+    public ModelRef<User> getFriendTo() {
+        return friendTo;
     }
 }

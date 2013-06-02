@@ -5,6 +5,7 @@ import java.util.Map;
 
 import jp.ac.titech.itpro.sds.fragile.meta.FriendMeta;
 import jp.ac.titech.itpro.sds.fragile.model.Friend;
+import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.utils.Encrypter;
 
 import org.slim3.datastore.Datastore;
@@ -16,39 +17,37 @@ import com.google.appengine.api.datastore.Transaction;
 public class FriendService {
     private static FriendMeta meta = FriendMeta.get();
 
-    public static Friend createFriend(Map<String, Object> input) {
+    public static Friend createFriend(User from, User to) {
         Friend friend = new Friend();
         Key key = Datastore.allocateId(Friend.class);
-        BeanUtil.copy(input, friend);
-        friend.setKey(key);        
+        friend.setKey(key);
+        friend.getFriendFrom().setModel(from);
+        friend.getFriendTo().setModel(to);
         Transaction tx = Datastore.beginTransaction();
         Datastore.put(friend);
         tx.commit();
         return friend;
     }
-/*
-    public static List<Friend> getUserByEmail(String email) {
+
+    public static List<Friend> getFriendToList(Key to) {
         try {
             return Datastore
                 .query(meta)
-                .filter(meta.email.equal(email))
+                .filter(meta.friendFrom.equal(to))
                 .asList();
         } catch (Exception e) {
             return null;
         }
     }
-
-    public static User getUserByEmailAndPassword(String email, String password) {
+    
+    public static List<Friend> getFriendFromList(Key from) {
         try {
             return Datastore
                 .query(meta)
-                .filter(
-                    meta.email.equal(email),
-                    meta.password.equal(Encrypter.getHash(password)))
-                .asSingle();
+                .filter(meta.friendTo.equal(from))
+                .asList();
         } catch (Exception e) {
             return null;
         }
     }
-    */
 }
