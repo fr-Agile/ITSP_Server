@@ -42,6 +42,8 @@ public class RegisterV1Endpoint {
                 result.setResult(FAIL);
             } else if (password.length() < PASS_LENGTH) {
                 result.setResult(FAIL);
+            } else if (UserService.getUserByEmail(email) != null) {
+                result.setResult(FAIL);
             } else {
                 User user = UserService.createUser(firstName, lastName, email, password);
                 if (user == null) {
