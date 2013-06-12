@@ -14,7 +14,7 @@ public class FriendResultV1Dto {
     
     private String email; 
 
-    private User me; 
+    private String myemail; 
     
     public String getResult() {
         return result;
@@ -32,11 +32,11 @@ public class FriendResultV1Dto {
         this.email = email;
     }
     
-    public User getMe() {
-        return me;
+    public String getMyemail() {
+        return myemail;
     }
 
-    public void setMe(User me) {
-        this.me = me;
+    public void setMyemail(String myemail) {
+        this.myemail = myemail;
     }
 }

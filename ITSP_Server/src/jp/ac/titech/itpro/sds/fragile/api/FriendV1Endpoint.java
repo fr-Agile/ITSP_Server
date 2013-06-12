@@ -21,16 +21,17 @@ public class FriendV1Endpoint {
     private static String SUCCESS = "success";
     private static String FAIL = "fail";
 
-    public FriendResultV1Dto Friendship(@Named("email") String email,@Named("me") User me){
+    public FriendResultV1Dto Friendship(@Named("email") String email,@Named("me")String myemail){
         
         FriendResultV1Dto result = new FriendResultV1Dto();
 
         try{
-            if (email == null || me == null) {
+            if (email == null || myemail == null) {
                 result.setResult(FAIL);
             } else {
                 User friend = UserService.getUserByEmail(email);
-                if (friend == null) {
+                User me = UserService.getUserByEmail(myemail);
+                if (friend == null || me == null) {
                     result.setResult(FAIL);
                 } else {
                     if (FriendService.isFriend(me.getKey(), friend.getKey())) {
