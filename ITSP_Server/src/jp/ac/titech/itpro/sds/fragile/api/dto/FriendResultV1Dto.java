@@ -2,8 +2,6 @@ package jp.ac.titech.itpro.sds.fragile.api.dto;
 
 import javax.persistence.Entity;
 
-import jp.ac.titech.itpro.sds.fragile.model.User;
-
 /**
  *
  */
