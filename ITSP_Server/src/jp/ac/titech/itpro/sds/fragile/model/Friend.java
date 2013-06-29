@@ -14,10 +14,9 @@ public class Friend implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Attribute(name = "fF")
-    private  ModelRef<User> friendFrom;
-    
+    private  ModelRef<User> friendFrom = new ModelRef<User>(User.class);
     @Attribute(name = "fT")
-    private  ModelRef<User> friendTo;
+    private  ModelRef<User> friendTo = new ModelRef<User>(User.class);
 
     @Attribute(primaryKey = true)
     private Key key;

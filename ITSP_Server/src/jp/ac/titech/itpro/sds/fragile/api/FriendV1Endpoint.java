@@ -33,18 +33,16 @@ public class FriendV1Endpoint {
                 User me = UserService.getUserByEmail(myemail);
                 if (friend == null || me == null) {
                     result.setResult(FAIL);
+                } else if (FriendService.isFriend(me.getKey(), friend.getKey())) {
+                    result.setResult(FAIL);
                 } else {
-                    if (FriendService.isFriend(me.getKey(), friend.getKey())) {
+                    Friend friendship = FriendService.createFriend(me, friend);
+                    if (friendship == null) {
                         result.setResult(FAIL);
                     } else {
-                        Friend friendship =
-                            FriendService.createFriend(me, friend);
-                        if (friendship == null) {
-                            result.setResult(FAIL);
-                        } else {
-                            result.setResult(SUCCESS);
-                        }
+                        result.setResult(SUCCESS);
                     }
+
                 }
             }
         } catch (Exception e) {

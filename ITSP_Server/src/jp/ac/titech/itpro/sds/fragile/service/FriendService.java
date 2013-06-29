@@ -35,9 +35,9 @@ public class FriendService {
                 .query(meta)
                 .filter(meta.friendFrom.equal(from), meta.friendTo.equal(to))
                 .count() > 0) {
-                return false;
-            } else {
                 return true;
+            } else {
+                return false;
             }
         } catch (Exception e) {
             return false;
