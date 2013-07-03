@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.slim3.datastore.Attribute;
 import org.slim3.datastore.Model;
+import org.slim3.datastore.ModelRef;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -13,6 +14,9 @@ public class Schedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Attribute(name = "us")
+    private  ModelRef<User> user = new ModelRef<User>(User.class);
+    
     @Attribute(primaryKey = true)
     private Key key;
 
@@ -27,6 +31,16 @@ public class Schedule implements Serializable {
 
     @Attribute(name = "rp")
     private Boolean isRepeat;
+    
+    /**
+     * Returns the user.
+     *
+     * @return the user 
+     */
+    public ModelRef<User> getUser() {
+        return user;
+    }
+    
     
     /**
      * Returns the key.
