@@ -9,7 +9,9 @@ import javax.inject.Named;
 
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
+import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
+import jp.ac.titech.itpro.sds.fragile.service.UserService;
 
 import com.google.api.server.spi.config.Api;
 
@@ -26,9 +28,11 @@ public class ScheduleV1EndPoint {
     
     public ScheduleResultV1Dto createSchedule(
             @Named("startTime") long startTime,
-            @Named("finishTime") long finishTime){
+            @Named("finishTime") long finishTime,
+            @Named("email") String email){
         
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
+        User user = UserService.getUserByEmail(email);
         
         try {
             if (startTime == 0 || finishTime == 0) {
@@ -43,13 +47,13 @@ public class ScheduleV1EndPoint {
                 map.put("finishTime", finishTime);
                 
                 Schedule schedule =
-                    ScheduleService.createSchedule(map);
+                    ScheduleService.createSchedule(map, user);
                 if (schedule == null) {
-                    // TODO createSchedule��null�ɂȂ邱�Ƃ͂���?���̂Ƃ��̏�����?
                     logger.warning("schedule not found");
                     result.setResult(FAIL);
                 } else {
                     result.setResult(SUCCESS);
+                    logger.warning("schedule not found" + user.getEmail());
                 } 
             }
         } catch (Exception e) {
