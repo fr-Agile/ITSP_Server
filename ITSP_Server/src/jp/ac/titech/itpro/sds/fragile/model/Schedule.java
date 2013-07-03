@@ -20,10 +20,10 @@ public class Schedule implements Serializable {
     private Long version;
     
     @Attribute(name = "sT")
-    private Date startTime;
+    private long startTime;
     
     @Attribute(name = "fT")
-    private Date finishTime;
+    private long finishTime;
 
     @Attribute(name = "rp")
     private Boolean isRepeat;
@@ -71,7 +71,7 @@ public class Schedule implements Serializable {
      *
      * @return the start time
      */
-    public Date getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
@@ -81,7 +81,7 @@ public class Schedule implements Serializable {
      * @param startTime
      *            the start time
      */
-    public void setStartTime(Date startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
     
@@ -90,7 +90,7 @@ public class Schedule implements Serializable {
      *
      * @return the finish time
      */
-    public Date getFinishTime() {
+    public long getFinishTime() {
         return finishTime;
     }
 
@@ -100,7 +100,7 @@ public class Schedule implements Serializable {
      * @param finishTime
      *            the finish time
      */
-    public void setFinishTime(Date finishTime) {
+    public void setFinishTime(long finishTime) {
         this.finishTime = finishTime;
     }
     

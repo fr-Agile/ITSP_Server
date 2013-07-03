@@ -1,5 +1,6 @@
 package jp.ac.titech.itpro.sds.fragile.api;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -24,15 +25,17 @@ public class ScheduleV1EndPoint {
     private static String FAIL = "fail";
     
     public ScheduleResultV1Dto createSchedule(
-            @Named("startTime") String startTime,
-            @Named("finishTime") String finishTime){
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime){
         
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
         
         try {
-            if (startTime == null || finishTime == null) {
+            if (startTime == 0 || finishTime == 0) {
+                logger.warning("data not found");
                 result.setResult(FAIL);
-            } else if(startTime.compareTo(finishTime) > 0) {
+            } else if(startTime > finishTime) {
+                logger.warning("startTime > finishTime");
                 result.setResult(FAIL);
             } else {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -43,12 +46,14 @@ public class ScheduleV1EndPoint {
                     ScheduleService.createSchedule(map);
                 if (schedule == null) {
                     // TODO createSchedule��null�ɂȂ邱�Ƃ͂���?���̂Ƃ��̏�����?
+                    logger.warning("schedule not found");
                     result.setResult(FAIL);
                 } else {
                     result.setResult(SUCCESS);
                 } 
             }
         } catch (Exception e) {
+            logger.warning("Exception" + e);
             result.setResult(FAIL);
         }
         return result;
