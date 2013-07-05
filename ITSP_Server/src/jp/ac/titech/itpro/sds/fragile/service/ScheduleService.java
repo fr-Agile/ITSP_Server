@@ -1,5 +1,6 @@
 package jp.ac.titech.itpro.sds.fragile.service;
 
+import java.util.List;
 import java.util.Map;
 
 import jp.ac.titech.itpro.sds.fragile.meta.ScheduleMeta;
@@ -26,5 +27,13 @@ public class ScheduleService {
         Datastore.put(schedule);
         tx.commit();
         return schedule;
+    }
+    
+    public static List<Schedule> getScheduleByUser(Key user) {
+        try {
+            return Datastore.query(meta).filter(meta.user.equal(user)).asList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

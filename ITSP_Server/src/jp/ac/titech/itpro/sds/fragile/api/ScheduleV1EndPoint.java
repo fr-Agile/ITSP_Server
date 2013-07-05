@@ -1,6 +1,5 @@
 package jp.ac.titech.itpro.sds.fragile.api;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -30,16 +29,18 @@ public class ScheduleV1EndPoint {
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             @Named("email") String email){
-        
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
-        User user = UserService.getUserByEmail(email);
         
+        User user = UserService.getUserByEmail(email);
         try {
             if (startTime == 0 || finishTime == 0) {
                 logger.warning("data not found");
                 result.setResult(FAIL);
             } else if(startTime > finishTime) {
                 logger.warning("startTime > finishTime");
+                result.setResult(FAIL);
+            } else if (user == null){
+                logger.warning("user not found");
                 result.setResult(FAIL);
             } else {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -53,7 +54,7 @@ public class ScheduleV1EndPoint {
                     result.setResult(FAIL);
                 } else {
                     result.setResult(SUCCESS);
-                    logger.warning("schedule not found" + user.getEmail());
+                    logger.warning("schedule added");
                 } 
             }
         } catch (Exception e) {
