@@ -18,19 +18,19 @@ public class RegisterV1Endpoint {
     private final static Logger logger = 
             Logger.getLogger(RegisterV1Endpoint.class.getName());
 
-    public final static String SUCCESS = "success";
-    public final static String FAIL = "fail";
-    public final static String NULL_FNAME = "null_fname";
-    public final static String NULL_LNAME = "null_lname";
-    public final static String NULL_EMAIL = "null_email";
-    public final static String NULL_PASS = "null_pass";
-    public final static String NULL_PASSA = "null_passa";
-    public final static String INVALID_ADDRESS = "invalid_address";
-    public final static String EXISTING_ADDRESS = "existing_address";
-    public final static String SHORT_PASS = "short_pass";
-    public final static String DIFFERENT_PASS = "different_pass";
-    public final static String UNEXPECTED_ERROR = "unexpected_error";
-    public final static int PASS_LENGTH = 6;
+    private final static String SUCCESS = "success";
+    private final static String FAIL = "fail";
+    private final static String NULL_FNAME = "null_fname";
+    private final static String NULL_LNAME = "null_lname";
+    private final static String NULL_EMAIL = "null_email";
+    private final static String NULL_PASS = "null_pass";
+    private final static String NULL_PASSA = "null_passa";
+    private final static String INVALID_ADDRESS = "invalid_address";
+    private final static String EXISTING_ADDRESS = "existing_address";
+    private final static String SHORT_PASS = "short_pass";
+    private final static String DIFFERENT_PASS = "different_pass";
+    private final static String UNEXPECTED_ERROR = "unexpected_error";
+    private final static int PASS_LENGTH = 6;
 
     public RegisterV1ResultDto register(@Named("firstName") String firstName,
             @Named("lastName") String lastName,

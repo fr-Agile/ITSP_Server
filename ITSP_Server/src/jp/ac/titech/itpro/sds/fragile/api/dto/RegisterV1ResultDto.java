@@ -11,6 +11,7 @@ import javax.persistence.Entity;
  */
 @Entity
 public class RegisterV1ResultDto {
+    
     private String result;
     private List<String> errorList = new ArrayList<String>();
 
