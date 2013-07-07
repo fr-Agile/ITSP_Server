@@ -20,21 +20,29 @@ public class FriendV1Endpoint {
     private static String SUCCESS = "success";
     private static String FAIL = "fail";
 
+    private static String NULLMY = "nullmy";
+    private static String NOFRIEND = "nofriend";
+    private static String ALREADY = "already";
+
     public FriendResultV1Dto Friendship(@Named("email") String email,
             @Named("myemail") String myemail) {
 
         FriendResultV1Dto result = new FriendResultV1Dto();
 
         try {
-            if (email == null || myemail == null) {
+            if (email == null){ 
                 result.setResult(FAIL);
+            }else if(myemail == null){
+                result.setResult(NULLMY);
             } else {
                 User friend = UserService.getUserByEmail(email);
                 User me = UserService.getUserByEmail(myemail);
-                if (friend == null || me == null) {
-                    result.setResult(FAIL);
+                if (friend == null){
+                    result.setResult(NOFRIEND);
+                }else if(me == null) {
+                    result.setResult(NULLMY);
                 } else if (FriendService.isFriend(me.getKey(), friend.getKey())) {
-                    result.setResult(FAIL);
+                    result.setResult(ALREADY);
                 } else {
                     Friend friendship = FriendService.createFriend(me, friend);
                     if (friendship == null) {
