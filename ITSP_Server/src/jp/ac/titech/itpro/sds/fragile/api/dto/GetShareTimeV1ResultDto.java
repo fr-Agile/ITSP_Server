@@ -1,7 +1,6 @@
 package jp.ac.titech.itpro.sds.fragile.api.dto;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -12,7 +11,7 @@ import javax.persistence.Entity;
 @Entity
 public class GetShareTimeV1ResultDto {
     private String result;
-    private List<String> strList = new ArrayList<String>();       // TODO DEBUG用
+    private List<GroupScheduleV1Dto> gsList;
 
     public String getResult() {
         return result;
@@ -22,11 +21,11 @@ public class GetShareTimeV1ResultDto {
         this.result = result;
     }
     
-    public List<String> getStrList() {
-        return strList;
+    public List<GroupScheduleV1Dto> getGroupScheduleList() {
+        return gsList;
     }
-    
-    public void addStr(String str) {
-        strList.add(str);
+
+    public void setGroupScheduleList(List<GroupScheduleV1Dto> gsList) {
+        this.gsList = gsList;
     }
 }

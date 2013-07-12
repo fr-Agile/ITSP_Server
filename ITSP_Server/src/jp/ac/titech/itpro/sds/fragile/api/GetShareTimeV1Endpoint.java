@@ -10,13 +10,15 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import jp.ac.titech.itpro.sds.fragile.model.GroupSchedule;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
+import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
 import jp.ac.titech.itpro.sds.fragile.utils.ScheduleComparator;
 import jp.ac.titech.itpro.sds.fragile.api.dto.GetShareTimeV1ResultDto;
+import jp.ac.titech.itpro.sds.fragile.api.dto.GroupScheduleV1Dto;
+import jp.ac.titech.itpro.sds.fragile.api.dto.UserV1Dto;
 
 import com.google.api.server.spi.config.Api;
 
@@ -27,8 +29,8 @@ public class GetShareTimeV1Endpoint {
     private final static Logger logger = 
             Logger.getLogger(GetShareTimeV1Endpoint.class.getName());
 
-    public final static String SUCCESS = "success";
-    public final static String FAIL = "fail";
+    private final static String SUCCESS = "success";
+    private final static String FAIL = "fail";
 
     public GetShareTimeV1ResultDto getShareTime(
             @Named("emailCSV") String emailCSV,
@@ -51,19 +53,15 @@ public class GetShareTimeV1Endpoint {
             for (String email : emailList) {
                 User user = UserService.getUserByEmail(email);
                 if (user == null) {
-                    throw new Exception("user not found: " + email);
+                    throw new Exception("user not found");
                 }
                 List<Schedule> scheduleList = ScheduleService.getScheduleByUser(user.getKey());
                 allSchedule.addAll(mergeSchedule(scheduleList));
             }
             // どの時間帯に誰が忙しいか、のリストを作る
-            List<GroupSchedule> gsList = getGroupScheduleList(allSchedule, startTime, finishTime);
+            List<GroupScheduleV1Dto> gsList = getGroupScheduleList(allSchedule, startTime, finishTime);
             
-            // TODO DEBUG用
-            for (GroupSchedule gs : gsList) {
-                result.addStr(gs.toString());
-            }
-            
+            result.setGroupScheduleList(gsList);
             result.setResult(SUCCESS);
             
 
@@ -129,16 +127,16 @@ public class GetShareTimeV1Endpoint {
     /*
      * スケジュールのリストから、誰がどの時間帯に忙しいのか、のリストを返す
      */
-    private List<GroupSchedule> getGroupScheduleList(
+    private List<GroupScheduleV1Dto> getGroupScheduleList(
         List<Schedule> scheduleList, long startTime, long finishTime) {
         
         // 全てのスケジュールの開始と終了の時間のリストを作成
         List<ScheduleChangedTime> sctList = getScheduleChangedTimeList(scheduleList);
         
         Collections.sort(sctList);
-        Set<User> busyUsers = new HashSet<User>();
-        List<GroupSchedule> gsList = new ArrayList<GroupSchedule>();
-        GroupSchedule current = new GroupSchedule();
+        Set<UserV1Dto> busyUsers = new HashSet<UserV1Dto>();
+        List<GroupScheduleV1Dto> gsList = new ArrayList<GroupScheduleV1Dto>();
+        GroupScheduleV1Dto current = new GroupScheduleV1Dto();
         current.setStartTime(startTime);
         
         for (ScheduleChangedTime sct : sctList) {
@@ -151,13 +149,16 @@ public class GetShareTimeV1Endpoint {
                 current.addAllUser(busyUsers);
                 gsList.add(current);
                 
-                current = new GroupSchedule();
+                current = new GroupScheduleV1Dto();
                 current.setStartTime(sctTime);
             }
+            
+            UserV1Dto userDto = new UserV1Dto();
+            CopyUtils.copyUser(userDto, sct.getUser());
             if (sct.isStartTime()) {
-                busyUsers.add(sct.getUser());
+                busyUsers.add(userDto);
             } else {
-                busyUsers.remove(sct.getUser());
+                busyUsers.remove(userDto);
             }
         }
         current.setFinishTime(finishTime);
