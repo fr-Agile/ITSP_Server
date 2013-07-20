@@ -1,12 +1,15 @@
 package jp.ac.titech.itpro.sds.fragile.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
 
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleResultV1Dto;
+import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
@@ -61,6 +64,34 @@ public class ScheduleV1EndPoint {
             logger.warning("Exception" + e);
             result.setResult(FAIL);
         }
+        return result;
+    }
+
+    public List<ScheduleV1Dto> getSchedule(
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime,
+            @Named("email") String email){
+        List<ScheduleV1Dto> result = new ArrayList<ScheduleV1Dto>();
+        
+        List<Schedule> schedules = ScheduleService
+                .getScheduleByUser(
+                    UserService.getUserByEmail(email),
+                    startTime,
+                    finishTime);
+        try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("startTime", startTime);
+            map.put("finishTime", finishTime);
+            
+            if (schedules == null) {
+                logger.warning("schedule not found");
+            } else {
+                logger.warning("schedule added");
+            }
+        } catch (Exception e) {
+            logger.warning("Exception" + e);
+        }
+
         return result;
     }
 }

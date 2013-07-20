@@ -29,9 +29,22 @@ public class ScheduleService {
         return schedule;
     }
     
-    public static List<Schedule> getScheduleByUser(Key user) {
+    public static List<Schedule> getScheduleByUser(User user) {
         try {
-            return Datastore.query(meta).filter(meta.user.equal(user)).asList();
+            return Datastore.query(meta).filter(meta.user.equal(user.getKey())).asList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static List<Schedule> getScheduleByUser(User user, Long startTime, Long finishTime) {
+        try {
+            return Datastore.query(meta)
+                    .filter(
+                        meta.user.equal(user.getKey()),
+                        meta.startTime.lessThanOrEqual(startTime),
+                        meta.finishTime.greaterThanOrEqual(finishTime))
+                    .asList();
         } catch (Exception e) {
             return null;
         }
