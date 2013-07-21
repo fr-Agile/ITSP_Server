@@ -9,6 +9,7 @@ import jp.ac.titech.itpro.sds.fragile.model.Friend;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.FriendService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
+import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
 import jp.ac.titech.itpro.sds.fragile.api.dto.GetFriendResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.UserV1Dto;
 
@@ -42,9 +43,7 @@ public class GetFriendV1Endpoint {
                     for (Friend friend : friendList) {
                         User friendData = friend.getFriendTo().getModel();
                         UserV1Dto friendDto = new UserV1Dto();
-                        friendDto.setFirstName(friendData.getFirstName());
-                        friendDto.setLastName(friendData.getLastName());
-                        friendDto.setEmail(friendData.getEmail());
+                        CopyUtils.copyUser(friendDto, friendData);
                         
                         result.addFriend(friendDto);
                     }
