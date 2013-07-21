@@ -55,7 +55,7 @@ public class GetShareTimeV1Endpoint {
                 if (user == null) {
                     throw new Exception("user not found");
                 }
-                List<Schedule> scheduleList = ScheduleService.getScheduleByUser(user.getKey());
+                List<Schedule> scheduleList = ScheduleService.getScheduleByUser(user);
                 allSchedule.addAll(mergeSchedule(scheduleList));
             }
             // どの時間帯に誰が忙しいか、のリストを作る
