@@ -87,6 +87,11 @@ public class ScheduleV1EndPoint {
                 logger.warning("schedule not found");
             } else {
                 logger.warning("schedule added");
+                for (Schedule schedule : schedules) {
+                    ScheduleV1Dto dto = 
+                            new ScheduleV1Dto(schedule.getStartTime(), schedule.getFinishTime());
+                    result.add(dto);
+                }
             }
         } catch (Exception e) {
             logger.warning("Exception" + e);
