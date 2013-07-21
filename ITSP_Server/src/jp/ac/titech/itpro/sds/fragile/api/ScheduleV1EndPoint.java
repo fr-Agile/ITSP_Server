@@ -86,6 +86,7 @@ public class ScheduleV1EndPoint {
             if (schedules == null) {
                 logger.warning("schedule not found");
             } else {
+                
                 logger.warning("schedule added");
                 for (Schedule schedule : schedules) {
                     ScheduleV1Dto dto = 
