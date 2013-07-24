@@ -5,7 +5,9 @@ import java.io.Serializable;
 import com.google.appengine.api.datastore.Key;
 
 import org.slim3.datastore.Attribute;
+import org.slim3.datastore.InverseModelListRef;
 import org.slim3.datastore.Model;
+import org.slim3.datastore.ModelRef;
 
 @Model(schemaVersion = 1)
 public class User implements Serializable {
@@ -24,11 +26,20 @@ public class User implements Serializable {
     @Attribute(name = "pW")
     private String password;
     
+    @Attribute(persistent = false)
+    private InverseModelListRef<UserGroupMap, User> UserGroupMapListRef =
+            new  InverseModelListRef<UserGroupMap, User>(UserGroupMap.class, "user",  this);
+    
     @Attribute(primaryKey = true)
     private Key key;
 
     @Attribute(version = true)
     private Long version;
+    
+    
+    public InverseModelListRef<UserGroupMap, User> getUserGroupMapListRef() {
+        return UserGroupMapListRef;
+    }
     
     /**
      * Returns the key.
