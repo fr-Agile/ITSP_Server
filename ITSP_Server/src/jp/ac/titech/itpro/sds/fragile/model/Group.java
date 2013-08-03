@@ -18,14 +18,14 @@ public class Group implements Serializable {
     private InverseModelListRef<UserGroupMap, Group> UserGroupMapListRef =
             new  InverseModelListRef<UserGroupMap, Group>(UserGroupMap.class, "group",  this);
     
-    @Attribute(name = "name")
+    @Attribute(name = "n")
     private String name;     //グループの名前
     
-    @Attribute(name = "owner")
+    @Attribute(name = "ow")
     private  ModelRef<User> user = new ModelRef<User>(User.class);   //グループを作成したユーザー
     
-    @Attribute(name = "frinedlist")
-    private String key_hash;   //ユーザーのキーのリストのhash値
+    @Attribute(name = "ml")
+    private String keyHash;   //ユーザーのキーのリストのhash値
     
     @Attribute(primaryKey = true)
     private Key key;
@@ -69,15 +69,7 @@ public class Group implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    public String getKey_hash() {
-        return key_hash;
-    }
-    
-    public void setKey_hash(String key_hash) {
-        this.key_hash = key_hash;
-    }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -86,6 +78,14 @@ public class Group implements Serializable {
         return result;
     }
     
+    public String getKeyHash() {
+        return keyHash;
+    }
+
+    public void setKeyHash(String keyHash) {
+        this.keyHash = keyHash;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

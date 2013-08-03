@@ -1,0 +1,88 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://itsptestapp.appspot.com/_ah/api",
+  "name" : "groupEndpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://itsptestapp.appspot.com/_ah/spi",
+    "deadline" : 10.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "methods" : {
+    "groupEndpoint.groupV1Endpoint.makeGroup" : {
+      "path" : "makeGroup/{name}/{owner}",
+      "httpMethod" : "POST",
+      "scopes" : [ ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "jp.ac.titech.itpro.sds.fragile.api.GroupV1Endpoint.makeGroup",
+      "request" : {
+        "parameters" : {
+          "name" : {
+            "type" : "string",
+            "required" : true
+          },
+          "owner" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "StringListContainer" : {
+        "id" : "StringListContainer",
+        "type" : "object",
+        "properties" : {
+          "list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "GroupResultV1Dto" : {
+        "id" : "GroupResultV1Dto",
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "jp.ac.titech.itpro.sds.fragile.api.GroupV1Endpoint.makeGroup" : {
+        "request" : {
+          "$ref" : "StringListContainer"
+        },
+        "response" : {
+          "$ref" : "GroupResultV1Dto"
+        }
+      }
+    }
+  }
+}
