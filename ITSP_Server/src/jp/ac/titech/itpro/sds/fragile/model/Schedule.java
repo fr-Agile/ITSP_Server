@@ -1,6 +1,9 @@
 package jp.ac.titech.itpro.sds.fragile.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 import org.slim3.datastore.Attribute;
 import org.slim3.datastore.Model;
 import org.slim3.datastore.ModelRef;
@@ -29,6 +32,10 @@ public class Schedule implements Serializable {
 
     @Attribute(name = "rp")
     private Boolean isRepeat;
+    
+    @Attribute(name = "ex")
+    private List<Date> excepts;
+    
     
     /**
      * Returns the user.
@@ -135,6 +142,16 @@ public class Schedule implements Serializable {
         this.isRepeat = isRepeat;
     }
     
+    public List<Date> getExcepts() {
+        return excepts;
+    }
+
+
+    public void setExcepts(List<Date> excepts) {
+        this.excepts = excepts;
+    }
+
+
     @Override
     public int hashCode() {
         final int prime = 31;
