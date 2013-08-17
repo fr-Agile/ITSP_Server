@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
@@ -25,8 +26,8 @@ public class ScheduleV1EndPoint {
     private final static Logger logger = Logger.getLogger(
         ScheduleV1EndPoint.class.getName());
     
-    private static String SUCCESS = "success";
-    private static String FAIL = "fail";
+    private static final String SUCCESS = CommonConstant.SUCCESS;
+    private static final String FAIL = CommonConstant.FAIL;
     
     public ScheduleResultV1Dto createSchedule(
             @Named("startTime") long startTime,

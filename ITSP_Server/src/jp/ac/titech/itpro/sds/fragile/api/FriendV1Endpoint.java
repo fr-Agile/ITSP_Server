@@ -4,6 +4,8 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
+import jp.ac.titech.itpro.sds.fragile.api.constant.FriendConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.FriendResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
@@ -16,13 +18,14 @@ import com.google.api.server.spi.config.Api;
 public class FriendV1Endpoint {
     private final static Logger logger = Logger
         .getLogger(FriendV1Endpoint.class.getName());
+    
 
-    private static String SUCCESS = "success";
-    private static String FAIL = "fail";
+    private static final String SUCCESS = CommonConstant.SUCCESS;
+    private static final String FAIL = CommonConstant.FAIL;
 
-    private static String NULLMY = "nullmy";
-    private static String NOFRIEND = "nofriend";
-    private static String ALREADY = "already";
+    private static final String NULLMY = FriendConstant.NULLMY;
+    private static final String NOFRIEND = FriendConstant.NOFRIEND;
+    private static final String ALREADY = FriendConstant.ALREADY;
 
     public FriendResultV1Dto Friendship(@Named("email") String email,
             @Named("myemail") String myemail) {

@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.LoginResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
@@ -18,8 +19,8 @@ public class LoginV1Endpoint {
     private final static Logger logger = Logger.getLogger(
         LoginV1Endpoint.class.getName());
 
-    private static String SUCCESS = "success";
-    private static String FAIL = "fail";
+    private static final String SUCCESS = CommonConstant.SUCCESS;
+    private static final String FAIL = CommonConstant.FAIL;
 
     public LoginResultV1Dto login(
             @Named("email") String email,

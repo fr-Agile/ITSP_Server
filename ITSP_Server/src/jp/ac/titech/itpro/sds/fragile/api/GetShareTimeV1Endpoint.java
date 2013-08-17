@@ -16,6 +16,7 @@ import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
 import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
 import jp.ac.titech.itpro.sds.fragile.utils.ScheduleComparator;
+import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.GetShareTimeV1ResultDto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.GroupScheduleV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.UserV1Dto;
@@ -26,11 +27,11 @@ import com.google.api.server.spi.config.Api;
 @Api(name = "getShareTimeEndpoint", version = "v1")
 public class GetShareTimeV1Endpoint {
 
-    private final static Logger logger = 
+    private static final Logger logger = 
             Logger.getLogger(GetShareTimeV1Endpoint.class.getName());
 
-    private final static String SUCCESS = "success";
-    private final static String FAIL = "fail";
+    private static final String SUCCESS = CommonConstant.SUCCESS;
+    private static final String FAIL = CommonConstant.FAIL;
 
     public GetShareTimeV1ResultDto getShareTime(
             @Named("emailCSV") String emailCSV,

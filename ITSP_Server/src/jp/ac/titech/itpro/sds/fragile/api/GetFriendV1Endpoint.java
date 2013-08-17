@@ -10,6 +10,7 @@ import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.FriendService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
 import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
+import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.GetFriendResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.UserV1Dto;
 
@@ -23,8 +24,8 @@ public class GetFriendV1Endpoint {
     private final static Logger logger = 
             Logger.getLogger(GetFriendV1Endpoint.class.getName());
 
-    private final static String SUCCESS = "success";
-    private final static String FAIL = "fail";
+    private static final String SUCCESS = CommonConstant.SUCCESS;
+    private static final String FAIL = CommonConstant.FAIL;
     
     
     @ApiMethod(path = "GetFriendResultDto/getFriendTo")
