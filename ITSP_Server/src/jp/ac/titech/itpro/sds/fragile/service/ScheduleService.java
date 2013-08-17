@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import jp.ac.titech.itpro.sds.fragile.meta.ScheduleMeta;
-import jp.ac.titech.itpro.sds.fragile.model.Friend;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 
