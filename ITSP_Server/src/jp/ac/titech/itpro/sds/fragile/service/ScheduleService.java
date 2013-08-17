@@ -28,6 +28,14 @@ public class ScheduleService {
         return schedule;
     }
     
+    public static boolean deleteSchedule(String keyS) {
+        Key key = Datastore.stringToKey(keyS);
+        Transaction tx = Datastore.beginTransaction();
+        Datastore.delete(key);
+        tx.commit();
+        return true;
+    }
+    
     public static List<Schedule> getScheduleByUser(User user) {
         try {
             return Datastore.query(meta).filter(meta.user.equal(user.getKey())).asList();

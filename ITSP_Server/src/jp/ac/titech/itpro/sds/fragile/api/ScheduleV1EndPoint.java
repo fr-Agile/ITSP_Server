@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.inject.Named;
 
 import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
+import org.slim3.datastore.Datastore;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
@@ -68,6 +69,16 @@ public class ScheduleV1EndPoint {
         return result;
     }
 
+    public ScheduleResultV1Dto deleteSchedule(
+        @Named("keyS") String keyS){
+        ScheduleResultV1Dto result = new ScheduleResultV1Dto();
+        if(ScheduleService.deleteSchedule(keyS)){
+            result.setResult(SUCCESS);
+        }else{
+            result.setResult(FAIL);
+        }
+        return result;
+    }
     public List<ScheduleV1Dto> getSchedule(
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
@@ -87,11 +98,10 @@ public class ScheduleV1EndPoint {
             if (schedules == null) {
                 logger.warning("schedule not found");
             } else {
-                
                 logger.warning("schedule added");
                 for (Schedule schedule : schedules) {
                     ScheduleV1Dto dto = 
-                            new ScheduleV1Dto(schedule.getStartTime(), schedule.getFinishTime());
+                            new ScheduleV1Dto(schedule.getStartTime(), schedule.getFinishTime(),Datastore.keyToString(schedule.getKey()));
                     result.add(dto);
                 }
             }
