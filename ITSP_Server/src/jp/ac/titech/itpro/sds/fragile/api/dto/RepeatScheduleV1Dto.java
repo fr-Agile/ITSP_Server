@@ -6,21 +6,18 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import jp.ac.titech.itpro.sds.fragile.api.container.DateListContainer;
-import jp.ac.titech.itpro.sds.fragile.api.container.IntegerListContainer;
-
 @Entity
 public class RepeatScheduleV1Dto {
     private long startTime;
     private long finishTime;
-    private IntegerListContainer repeatDays;
-    private DateListContainer excepts;
+    private List<Integer> repeatDays;
+    private List<Date> excepts;
     
     public RepeatScheduleV1Dto(long startTime, long finishTime, List<Integer> repeatDays, List<Date> excepts) {
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);
-        this.getRepeatDays().setList(repeatDays);
-        this.getExcepts().setList(excepts);
+        this.setRepeatDays(repeatDays);
+        this.setExcepts(excepts);
         
     }
 
@@ -40,25 +37,21 @@ public class RepeatScheduleV1Dto {
         this.finishTime = finishTime;
     }
 
-    public IntegerListContainer getRepeatDays() {
+    public List<Integer> getRepeatDays() {
         return repeatDays;
     }
 
-    public void setRepeatDays(IntegerListContainer repeatDays) {
+    public void setRepeatDays(List<Integer> repeatDays) {
         this.repeatDays = repeatDays;
     }
 
-    public DateListContainer getExcepts() {
+    public List<Date> getExcepts() {
         return excepts;
     }
 
-    public void setExcepts(DateListContainer excepts) {
+    public void setExcepts(List<Date> excepts) {
         this.excepts = excepts;
     }
 
-    
-
-    
-    
     
 }

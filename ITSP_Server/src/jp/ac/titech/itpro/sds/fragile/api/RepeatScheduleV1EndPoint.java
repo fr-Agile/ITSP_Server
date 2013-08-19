@@ -1,6 +1,7 @@
 package jp.ac.titech.itpro.sds.fragile.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import jp.ac.titech.itpro.sds.fragile.api.container.DateListContainer;
-import jp.ac.titech.itpro.sds.fragile.api.container.IntegerListContainer;
+import jp.ac.titech.itpro.sds.fragile.api.container.RepeatScheduleContainer;
 import jp.ac.titech.itpro.sds.fragile.api.dto.RepeatScheduleResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.RepeatScheduleV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.RepeatSchedule;
@@ -31,24 +31,27 @@ public class RepeatScheduleV1EndPoint {
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             @Named("email") String email,
-            IntegerListContainer repeatDays,
-            DateListContainer excepts) {
+            RepeatScheduleContainer contain) {
         RepeatScheduleResultV1Dto result = new RepeatScheduleResultV1Dto();
         User user = UserService.getUserByEmail(email);
         try {
             if (startTime == 0 || finishTime == 0) {
-                logger.warning("data not found");
+                logger.warning("RS data not found");
                 result.setResult(FAIL);
             } else if(startTime > finishTime) {
                 logger.warning("startTime > finishTime");
                 result.setResult(FAIL);
             } else if (user == null){
-                logger.warning("user not found");
+                logger.warning("RS user not found");
                 result.setResult(FAIL);
             } else {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("startTime", startTime);
                 map.put("finishTime", finishTime);
+                
+                List<Integer> repeatDays = contain.getIntegers();
+                List<Date> excepts = contain.getDates();
+                
                 map.put("repeatDays", repeatDays);
                 map.put("excepts", excepts);
                 
@@ -73,8 +76,7 @@ public class RepeatScheduleV1EndPoint {
         @Named("startTime") long startTime,
         @Named("finishTime") long finishTime,
         @Named("email") String email,
-        IntegerListContainer repeatDays,
-        DateListContainer excepts){
+        RepeatScheduleContainer contain){
         List<RepeatScheduleV1Dto> result = new ArrayList<RepeatScheduleV1Dto>();
 
         List<RepeatSchedule> repeatSchedules = RepeatScheduleService
@@ -86,6 +88,10 @@ public class RepeatScheduleV1EndPoint {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("startTime", startTime);
             map.put("finishTime", finishTime);
+            
+            List<Integer> repeatDays = contain.getIntegers();
+            List<Date> excepts = contain.getDates();
+            
             map.put("repeatDays", repeatDays);
             map.put("excepts", excepts);
             if (repeatSchedules == null) {

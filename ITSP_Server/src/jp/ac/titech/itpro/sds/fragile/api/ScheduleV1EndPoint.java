@@ -58,7 +58,7 @@ public class ScheduleV1EndPoint {
                     result.setResult(FAIL);
                 } else {
                     result.setResult(SUCCESS);
-                    logger.warning("schedule added");
+                    logger.warning("new schedule added");
                 } 
             }
         } catch (Exception e) {
