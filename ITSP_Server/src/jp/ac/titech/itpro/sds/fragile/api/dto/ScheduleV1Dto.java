@@ -7,10 +7,12 @@ import javax.persistence.Entity;
 public class ScheduleV1Dto {
     private long startTime;
     private long finishTime;
+    private String key;
     
-    public ScheduleV1Dto(long startTime, long finishTime) {
+    public ScheduleV1Dto(long startTime, long finishTime,String key) {
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);
+        this.setKey(key);
     }
     
     public long getStartTime() {
@@ -24,6 +26,12 @@ public class ScheduleV1Dto {
     }
     public void setFinishTime(long finishTime) {
         this.finishTime = finishTime;
+    }
+    public String getKey() {
+        return key;
+    }
+    public void setKey(String key) {
+        this.key = key;
     }
     
 }

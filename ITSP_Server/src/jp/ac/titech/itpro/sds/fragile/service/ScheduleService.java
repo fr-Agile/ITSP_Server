@@ -30,9 +30,7 @@ public class ScheduleService {
     
     public static boolean deleteSchedule(String keyS) {
         Key key = Datastore.stringToKey(keyS);
-        Transaction tx = Datastore.beginTransaction();
         Datastore.delete(key);
-        tx.commit();
         return true;
     }
     
