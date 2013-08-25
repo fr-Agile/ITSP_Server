@@ -75,8 +75,8 @@ public class RepeatScheduleV1EndPoint {
     public List<RepeatScheduleV1Dto> getRepeatSchedule(
         @Named("startTime") long startTime,
         @Named("finishTime") long finishTime,
-        @Named("email") String email,
-        RepeatScheduleContainer contain){
+        @Named("email") String email
+        ){
         List<RepeatScheduleV1Dto> result = new ArrayList<RepeatScheduleV1Dto>();
 
         List<RepeatSchedule> repeatSchedules = RepeatScheduleService
@@ -85,15 +85,6 @@ public class RepeatScheduleV1EndPoint {
                     startTime,
                     finishTime);
         try {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("startTime", startTime);
-            map.put("finishTime", finishTime);
-            
-            List<Integer> repeatDays = contain.getIntegers();
-            List<Date> excepts = contain.getDates();
-            
-            map.put("repeatDays", repeatDays);
-            map.put("excepts", excepts);
             if (repeatSchedules == null) {
                 logger.warning("repeat schedule not found");
             } else {
