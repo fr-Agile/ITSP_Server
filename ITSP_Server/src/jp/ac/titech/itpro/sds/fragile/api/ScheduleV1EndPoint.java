@@ -79,6 +79,21 @@ public class ScheduleV1EndPoint {
         }
         return result;
     }
+    
+    public ScheduleResultV1Dto editSchedule(
+            @Named("keyS") String keyS,
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime){
+            ScheduleResultV1Dto result = new ScheduleResultV1Dto();
+            if(keyS != null){
+                ScheduleService.editSchedule(keyS,startTime,finishTime);
+                result.setResult(SUCCESS);
+            }else{
+                result.setResult(FAIL);
+            }
+            return result;
+        }
+    
     public List<ScheduleV1Dto> getSchedule(
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,

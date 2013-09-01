@@ -34,6 +34,14 @@ public class ScheduleService {
         return true;
     }
     
+    public static void editSchedule(String keyS,Long startTime,Long finishTime) {
+        Key key = Datastore.stringToKey(keyS);
+        Schedule schedule = Datastore.get(Schedule.class,key);
+        schedule.setStartTime(startTime);
+        schedule.setFinishTime(finishTime);
+        Datastore.put(schedule);
+    }
+    
     public static List<Schedule> getScheduleByUser(User user) {
         try {
             return Datastore.query(meta).filter(meta.user.equal(user.getKey())).asList();
