@@ -2,7 +2,9 @@ package jp.ac.titech.itpro.sds.fragile.api;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,8 +12,10 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
+import jp.ac.titech.itpro.sds.fragile.model.RepeatSchedule;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
+import jp.ac.titech.itpro.sds.fragile.service.RepeatScheduleService;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
 import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
@@ -57,7 +61,12 @@ public class GetShareTimeV1Endpoint {
                     throw new Exception("user not found");
                 }
                 List<Schedule> scheduleList = ScheduleService.getScheduleByUser(user);
+                // repeatScheduleをscheduleに変換して追加
+                List<RepeatSchedule> repeatSchedules = 
+                        RepeatScheduleService.getRepeatScheduleByUser(user);
+                addRepeatSchedule(scheduleList, repeatSchedules, startTime, finishTime, user);
                 allSchedule.addAll(mergeSchedule(scheduleList));
+                
             }
             // どの時間帯に誰が忙しいか、のリストを作る
             List<GroupScheduleV1Dto> gsList = getGroupScheduleList(allSchedule, startTime, finishTime);
@@ -73,6 +82,55 @@ public class GetShareTimeV1Endpoint {
         return result;
     }
     
+    /*
+     * repeatScheduleをscheduleに変換してscheduleListに追加
+     * startTimeの週の日曜日からfinishTimeの週の土曜までの繰り返しスケジュールを追加
+     */
+    private void addRepeatSchedule(List<Schedule> scheduleList,
+            List<RepeatSchedule> repeatSchedules, long startTime, long finishTime, User user) {
+        // start, finishをCalendar型に変換
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTimeInMillis(startTime);
+        Calendar finishDate = Calendar.getInstance();
+        startDate.setTimeInMillis(finishTime);
+        // startの週の日曜日, finishの週の土曜日を求める
+        Calendar startSun = (Calendar) startDate.clone();
+        startSun.add(Calendar.DAY_OF_MONTH, -(startDate.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY));
+        Calendar finishSat = (Calendar) finishDate.clone();
+        finishSat.add(Calendar.DAY_OF_MONTH, -(finishDate.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY) + 6);
+        
+        Calendar sun = (Calendar) startSun.clone();
+        sun.set(Calendar.HOUR_OF_DAY, 0);
+        sun.set(Calendar.MINUTE, 0);
+        sun.set(Calendar.SECOND, 0);
+        sun.set(Calendar.MILLISECOND, 0);
+        // startの週の日曜から順に追加していく
+        while (sun.getTimeInMillis() < finishSat.getTimeInMillis()) {
+            for (RepeatSchedule repeat : repeatSchedules) {
+                for (int day : repeat.getRepeatDays()) {
+                    // TODO exceptsの処理を追加する
+                    // scheduleの始まりと終わりを設定する
+                    Calendar start = (Calendar) sun.clone();
+                    Calendar finish = (Calendar) sun.clone();
+                    // 日曜からのずれを足し込む
+                    start.add(Calendar.DAY_OF_MONTH, day);
+                    finish.add(Calendar.DAY_OF_MONTH, day);
+                    // 時間を設定する
+                    start.add(Calendar.MILLISECOND, (int) repeat.getStartTime());
+                    finish.add(Calendar.MILLISECOND, (int) repeat.getFinishTime());
+                    // Schedule型を作成しリストに追加する
+                    Schedule schedule = new Schedule();
+                    schedule.getUser().setModel(user);
+                    schedule.setStartTime(start.getTimeInMillis());
+                    schedule.setFinishTime(finish.getTimeInMillis());
+                    scheduleList.add(schedule);
+                }
+            }
+            // 一週間ずつずらす
+            sun.add(Calendar.DAY_OF_MONTH, 7);
+        }
+    }
+
     /*
      * 重なっているスケジュールをマージする
      * userは全て同じであることを仮定している

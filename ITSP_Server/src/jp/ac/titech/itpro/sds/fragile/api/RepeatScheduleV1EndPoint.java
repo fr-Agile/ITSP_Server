@@ -88,8 +88,6 @@ public class RepeatScheduleV1EndPoint {
             if (repeatSchedules == null) {
                 logger.warning("repeat schedule not found");
             } else {
-
-                logger.warning("repeat schedule added");
                 for (RepeatSchedule repeatSchedule : repeatSchedules) {
                     RepeatScheduleV1Dto dto = 
                             new RepeatScheduleV1Dto(repeatSchedule.getStartTime(), repeatSchedule.getFinishTime(), repeatSchedule.getRepeatDays(), repeatSchedule.getExcepts());

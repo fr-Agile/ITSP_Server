@@ -30,10 +30,10 @@ public class RepeatSchedule implements Serializable{
     @Attribute(name = "fT")
     private long finishTime;
     
-    @Attribute(name = "rp", persistent = false)
+    @Attribute(name = "rp")
     private List<Integer> repeatDays;
     
-    @Attribute(name = "ex", persistent = false)
+    @Attribute(name = "ex")
     private List<Date> excepts;
 
     public ModelRef<User> getUser() {
