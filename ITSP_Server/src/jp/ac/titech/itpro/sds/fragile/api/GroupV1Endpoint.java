@@ -9,10 +9,15 @@ import javax.inject.Named;
 
 import jp.ac.titech.itpro.sds.fragile.api.container.StringListContainer;
 import jp.ac.titech.itpro.sds.fragile.api.dto.GroupResultV1Dto;
+import jp.ac.titech.itpro.sds.fragile.api.dto.GroupV1Dto;
+import jp.ac.titech.itpro.sds.fragile.api.dto.UserV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.Group;
 import jp.ac.titech.itpro.sds.fragile.model.User;
+import jp.ac.titech.itpro.sds.fragile.model.UserGroupMap;
 import jp.ac.titech.itpro.sds.fragile.service.GroupService;
+import jp.ac.titech.itpro.sds.fragile.service.UserGroupMapService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
+import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
 
 import com.google.api.server.spi.config.Api;
 
@@ -36,7 +41,7 @@ public class GroupV1Endpoint {
         GroupResultV1Dto result = new GroupResultV1Dto();
 
         try {
-            if (emails.size() > 0){ 
+            if (emails.size() <= 0){ 
                 result.setResult(FAIL);
             }else if(name == null){
                 result.setResult(NULLNAME);
@@ -67,5 +72,48 @@ public class GroupV1Endpoint {
             result.setResult(FAIL);
         }
         return result;
+    }
+    public List<GroupV1Dto> getGroupList(@Named("email") String email) {
+        List<GroupV1Dto> list = new ArrayList<GroupV1Dto>();
+        try {
+            User user = UserService.getUserByEmail(email);
+            if (user == null) {
+                
+            } else {
+                // userの所属しているグループを取得する
+                List<UserGroupMap> ugmToGroupList = UserGroupMapService.getGroupsByUser(user);
+                if (ugmToGroupList != null) {
+                    for (UserGroupMap ugmToGroup : ugmToGroupList) {
+                        Group group = ugmToGroup.getGroup().getModel();
+                        List<UserV1Dto> userList = new ArrayList<UserV1Dto>();
+                        // グループに所属しているユーザを取得する
+                        List<UserGroupMap> ugmToUserList =
+                                group.getUserGroupMapListRef().getModelList();
+                        if (ugmToUserList != null) {
+                            for (UserGroupMap ugmToUser : ugmToUserList) {
+                                UserV1Dto userDto = new UserV1Dto();
+                                CopyUtils.copyUser(userDto, ugmToUser
+                                    .getUser()
+                                    .getModel());
+                                userList.add(userDto);
+                            }
+                        }
+                        // グループの情報をDtoにつめる
+                        GroupV1Dto groupDto = new GroupV1Dto();
+                        groupDto.setName(group.getName());
+                        UserV1Dto owner = new UserV1Dto();
+                        CopyUtils.copyUser(owner, group.getUser().getModel());
+                        groupDto.setOwner(owner);
+                        groupDto.setUserlList(userList);
+                        
+                        list.add(groupDto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+        return list;
     }
 }
