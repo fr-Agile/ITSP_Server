@@ -1,20 +1,18 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"nPbVolg1F8jpPe9kkErPtt8mpZE/pueDuyp-TF1a0L_giiWhtbPRwqs\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/V-H4zcPbQi99tFy0pKG9jjONTiM\"",
  "discoveryVersion": "v1",
  "id": "scheduleEndpoint:v1",
  "name": "scheduleEndpoint",
  "version": "v1",
  "description": "This is an API",
- "ownerDomain": "google.com",
- "ownerName": "Google",
  "icons": {
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rpc",
- "rootUrl": "https://itsptestapp.appspot.com/_ah/api/",
- "rpcUrl": "https://itsptestapp.appspot.com/_ah/api/rpc",
+ "rootUrl": "https://fragile_t.appspot.com/_ah/api/",
+ "rpcUrl": "https://fragile_t.appspot.com/_ah/api/rpc",
  "rpcPath": "/_ah/api/rpc",
  "parameters": {
   "alt": {
@@ -66,13 +64,7 @@
    "id": "ScheduleResultV1Dto",
    "type": "object",
    "properties": {
-    "finishTime": {
-     "type": "string"
-    },
     "result": {
-     "type": "string"
-    },
-    "startTime": {
      "type": "string"
     }
    }
@@ -84,6 +76,9 @@
     "finishTime": {
      "type": "string",
      "format": "int64"
+    },
+    "key": {
+     "type": "string"
     },
     "startTime": {
      "type": "string",
@@ -127,6 +122,48 @@
     "startTime",
     "finishTime",
     "email"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.deleteSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.deleteSchedule",
+   "parameters": {
+    "keyS": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "keyS"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.editSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.editSchedule",
+   "parameters": {
+    "finishTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    },
+    "keyS": {
+     "type": "string",
+     "required": true
+    },
+    "startTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "keyS",
+    "startTime",
+    "finishTime"
    ],
    "returns": {
     "$ref": "ScheduleResultV1Dto"

@@ -1,20 +1,18 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"nPbVolg1F8jpPe9kkErPtt8mpZE/JLiTD-kjygmZj2YX4guguGnk_MI\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/3PkI9lbDYiD0O7zayO7mNCcMnUs\"",
  "discoveryVersion": "v1",
  "id": "groupEndpoint:v1",
  "name": "groupEndpoint",
  "version": "v1",
  "description": "This is an API",
- "ownerDomain": "google.com",
- "ownerName": "Google",
  "icons": {
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rpc",
- "rootUrl": "https://itsptestapp.appspot.com/_ah/api/",
- "rpcUrl": "https://itsptestapp.appspot.com/_ah/api/rpc",
+ "rootUrl": "https://fragile_t.appspot.com/_ah/api/",
+ "rpcUrl": "https://fragile_t.appspot.com/_ah/api/rpc",
  "rpcPath": "/_ah/api/rpc",
  "parameters": {
   "alt": {
@@ -71,6 +69,36 @@
     }
    }
   },
+  "GroupV1Dto": {
+   "id": "GroupV1Dto",
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "owner": {
+     "$ref": "UserV1Dto"
+    },
+    "userlList": {
+     "type": "array",
+     "items": {
+      "$ref": "UserV1Dto"
+     }
+    }
+   }
+  },
+  "GroupV1DtoCollection": {
+   "id": "GroupV1DtoCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "GroupV1Dto"
+     }
+    }
+   }
+  },
   "StringListContainer": {
    "id": "StringListContainer",
    "type": "object",
@@ -82,9 +110,40 @@
      }
     }
    }
+  },
+  "UserV1Dto": {
+   "id": "UserV1Dto",
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string"
+    },
+    "firstName": {
+     "type": "string"
+    },
+    "lastName": {
+     "type": "string"
+    }
+   }
   }
  },
  "methods": {
+  "groupEndpoint.groupV1Endpoint.getGroupList": {
+   "id": "groupEndpoint.groupV1Endpoint.getGroupList",
+   "allowGet": true,
+   "parameters": {
+    "email": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "email"
+   ],
+   "returns": {
+    "$ref": "GroupV1DtoCollection"
+   }
+  },
   "groupEndpoint.groupV1Endpoint.makeGroup": {
    "id": "groupEndpoint.groupV1Endpoint.makeGroup",
    "parameters": {

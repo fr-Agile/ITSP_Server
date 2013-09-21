@@ -1,12 +1,12 @@
 {
   "extends" : "thirdParty.api",
   "abstract" : false,
-  "root" : "https://itsptestapp.appspot.com/_ah/api",
+  "root" : "https://fragile_t.appspot.com/_ah/api",
   "name" : "groupEndpoint",
   "version" : "v1",
   "defaultVersion" : false,
   "adapter" : {
-    "bns" : "https://itsptestapp.appspot.com/_ah/spi",
+    "bns" : "https://fragile_t.appspot.com/_ah/spi",
     "deadline" : 10.0,
     "type" : "lily"
   },
@@ -48,6 +48,26 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "groupEndpoint.groupV1Endpoint.getGroupList" : {
+      "path" : "groupv1dtocollection/{email}",
+      "httpMethod" : "GET",
+      "scopes" : [ ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "jp.ac.titech.itpro.sds.fragile.api.GroupV1Endpoint.getGroupList",
+      "request" : {
+        "parameters" : {
+          "email" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
@@ -72,6 +92,51 @@
             "type" : "string"
           }
         }
+      },
+      "GroupV1Dto" : {
+        "id" : "GroupV1Dto",
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "owner" : {
+            "$ref" : "UserV1Dto"
+          },
+          "userlList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "UserV1Dto"
+            }
+          }
+        }
+      },
+      "UserV1Dto" : {
+        "id" : "UserV1Dto",
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GroupV1DtoCollection" : {
+        "id" : "GroupV1DtoCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "GroupV1Dto"
+            }
+          }
+        }
       }
     },
     "methods" : {
@@ -81,6 +146,11 @@
         },
         "response" : {
           "$ref" : "GroupResultV1Dto"
+        }
+      },
+      "jp.ac.titech.itpro.sds.fragile.api.GroupV1Endpoint.getGroupList" : {
+        "response" : {
+          "$ref" : "GroupV1DtoCollection"
         }
       }
     }

@@ -1,12 +1,12 @@
 {
   "extends" : "thirdParty.api",
   "abstract" : false,
-  "root" : "https://itsptestapp.appspot.com/_ah/api",
+  "root" : "https://fragile_t.appspot.com/_ah/api",
   "name" : "scheduleEndpoint",
   "version" : "v1",
   "defaultVersion" : false,
   "adapter" : {
-    "bns" : "https://itsptestapp.appspot.com/_ah/spi",
+    "bns" : "https://fragile_t.appspot.com/_ah/spi",
     "deadline" : 10.0,
     "type" : "lily"
   },
@@ -24,6 +24,26 @@
     "maxAge" : 0
   },
   "methods" : {
+    "scheduleEndpoint.scheduleV1EndPoint.deleteSchedule" : {
+      "path" : "schedule/{keyS}",
+      "httpMethod" : "DELETE",
+      "scopes" : [ ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.deleteSchedule",
+      "request" : {
+        "parameters" : {
+          "keyS" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "scheduleEndpoint.scheduleV1EndPoint.getSchedule" : {
       "path" : "schedulev1dtocollection/{startTime}/{finishTime}/{email}",
       "httpMethod" : "GET",
@@ -79,10 +99,47 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "scheduleEndpoint.scheduleV1EndPoint.editSchedule" : {
+      "path" : "editSchedule/{keyS}/{startTime}/{finishTime}",
+      "httpMethod" : "POST",
+      "scopes" : [ ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.editSchedule",
+      "request" : {
+        "parameters" : {
+          "keyS" : {
+            "type" : "string",
+            "required" : true
+          },
+          "startTime" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "finishTime" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
     "schemas" : {
+      "ScheduleResultV1Dto" : {
+        "id" : "ScheduleResultV1Dto",
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string"
+          }
+        }
+      },
       "ScheduleV1Dto" : {
         "id" : "ScheduleV1Dto",
         "type" : "object",
@@ -94,6 +151,9 @@
           "finishTime" : {
             "type" : "string",
             "format" : "int64"
+          },
+          "key" : {
+            "type" : "string"
           }
         }
       },
@@ -108,30 +168,25 @@
             }
           }
         }
-      },
-      "ScheduleResultV1Dto" : {
-        "id" : "ScheduleResultV1Dto",
-        "type" : "object",
-        "properties" : {
-          "result" : {
-            "type" : "string"
-          },
-          "startTime" : {
-            "type" : "string"
-          },
-          "finishTime" : {
-            "type" : "string"
-          }
-        }
       }
     },
     "methods" : {
+      "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.deleteSchedule" : {
+        "response" : {
+          "$ref" : "ScheduleResultV1Dto"
+        }
+      },
       "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.getSchedule" : {
         "response" : {
           "$ref" : "ScheduleV1DtoCollection"
         }
       },
       "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.createSchedule" : {
+        "response" : {
+          "$ref" : "ScheduleResultV1Dto"
+        }
+      },
+      "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.editSchedule" : {
         "response" : {
           "$ref" : "ScheduleResultV1Dto"
         }

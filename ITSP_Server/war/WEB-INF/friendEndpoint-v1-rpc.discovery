@@ -1,20 +1,18 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"nPbVolg1F8jpPe9kkErPtt8mpZE/gC9L-PcskP-IqnKNTH0FjPoZRb8\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/DX60oecPqVqYy3UCK9zrS3ZVcJQ\"",
  "discoveryVersion": "v1",
  "id": "friendEndpoint:v1",
  "name": "friendEndpoint",
  "version": "v1",
  "description": "This is an API",
- "ownerDomain": "google.com",
- "ownerName": "Google",
  "icons": {
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rpc",
- "rootUrl": "https://itsptestapp.appspot.com/_ah/api/",
- "rpcUrl": "https://itsptestapp.appspot.com/_ah/api/rpc",
+ "rootUrl": "https://fragile_t.appspot.com/_ah/api/",
+ "rpcUrl": "https://fragile_t.appspot.com/_ah/api/rpc",
  "rpcPath": "/_ah/api/rpc",
  "parameters": {
   "alt": {

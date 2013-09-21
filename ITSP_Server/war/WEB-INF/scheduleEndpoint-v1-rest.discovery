@@ -1,21 +1,19 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"nPbVolg1F8jpPe9kkErPtt8mpZE/pueDuyp-TF1a0L_giiWhtbPRwqs\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/V-H4zcPbQi99tFy0pKG9jjONTiM\"",
  "discoveryVersion": "v1",
  "id": "scheduleEndpoint:v1",
  "name": "scheduleEndpoint",
  "version": "v1",
  "description": "This is an API",
- "ownerDomain": "google.com",
- "ownerName": "Google",
  "icons": {
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rest",
- "baseUrl": "https://itsptestapp.appspot.com/_ah/api/scheduleEndpoint/v1/",
+ "baseUrl": "https://fragile_t.appspot.com/_ah/api/scheduleEndpoint/v1/",
  "basePath": "/_ah/api/scheduleEndpoint/v1/",
- "rootUrl": "https://itsptestapp.appspot.com/_ah/api/",
+ "rootUrl": "https://fragile_t.appspot.com/_ah/api/",
  "servicePath": "scheduleEndpoint/v1/",
  "batchPath": "batch",
  "parameters": {
@@ -68,13 +66,7 @@
    "id": "ScheduleResultV1Dto",
    "type": "object",
    "properties": {
-    "finishTime": {
-     "type": "string"
-    },
     "result": {
-     "type": "string"
-    },
-    "startTime": {
      "type": "string"
     }
    }
@@ -86,6 +78,9 @@
     "finishTime": {
      "type": "string",
      "format": "int64"
+    },
+    "key": {
+     "type": "string"
     },
     "startTime": {
      "type": "string",
@@ -136,6 +131,56 @@
       "startTime",
       "finishTime",
       "email"
+     ],
+     "response": {
+      "$ref": "ScheduleResultV1Dto"
+     }
+    },
+    "deleteSchedule": {
+     "id": "scheduleEndpoint.scheduleV1EndPoint.deleteSchedule",
+     "path": "schedule/{keyS}",
+     "httpMethod": "DELETE",
+     "parameters": {
+      "keyS": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "keyS"
+     ],
+     "response": {
+      "$ref": "ScheduleResultV1Dto"
+     }
+    },
+    "editSchedule": {
+     "id": "scheduleEndpoint.scheduleV1EndPoint.editSchedule",
+     "path": "editSchedule/{keyS}/{startTime}/{finishTime}",
+     "httpMethod": "POST",
+     "parameters": {
+      "finishTime": {
+       "type": "string",
+       "required": true,
+       "format": "int64",
+       "location": "path"
+      },
+      "keyS": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      },
+      "startTime": {
+       "type": "string",
+       "required": true,
+       "format": "int64",
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "keyS",
+      "startTime",
+      "finishTime"
      ],
      "response": {
       "$ref": "ScheduleResultV1Dto"

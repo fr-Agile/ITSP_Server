@@ -1,20 +1,18 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"nPbVolg1F8jpPe9kkErPtt8mpZE/lysrTc1erjW4GqluUYllH_MDvNk\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/mPYzSMB53I0-9WE0BtkIkga_U1I\"",
  "discoveryVersion": "v1",
  "id": "loginEndpoint:v1",
  "name": "loginEndpoint",
  "version": "v1",
  "description": "This is an API",
- "ownerDomain": "google.com",
- "ownerName": "Google",
  "icons": {
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
  "protocol": "rpc",
- "rootUrl": "https://itsptestapp.appspot.com/_ah/api/",
- "rpcUrl": "https://itsptestapp.appspot.com/_ah/api/rpc",
+ "rootUrl": "https://fragile_t.appspot.com/_ah/api/",
+ "rpcUrl": "https://fragile_t.appspot.com/_ah/api/rpc",
  "rpcPath": "/_ah/api/rpc",
  "parameters": {
   "alt": {
