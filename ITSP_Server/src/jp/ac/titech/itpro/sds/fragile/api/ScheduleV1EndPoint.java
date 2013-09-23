@@ -108,9 +108,6 @@ public class ScheduleV1EndPoint {
                     startTime,
                     finishTime);
         try {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("startTime", startTime);
-            map.put("finishTime", finishTime);
             
             if (schedules == null) {
                 logger.warning("schedule not found");
