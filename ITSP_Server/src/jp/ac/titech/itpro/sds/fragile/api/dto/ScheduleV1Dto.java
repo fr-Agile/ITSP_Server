@@ -9,6 +9,9 @@ public class ScheduleV1Dto {
     private long finishTime;
     private String key;
     
+    public ScheduleV1Dto() {
+    }
+    
     public ScheduleV1Dto(long startTime, long finishTime,String key) {
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);

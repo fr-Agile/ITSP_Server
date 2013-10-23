@@ -52,17 +52,9 @@ public class ScheduleService {
 
     public static List<Schedule> getScheduleByUser(User user, Long startTime, Long finishTime) {
         try {
-            /*
-            return Datastore.query(meta)
-                    .filter(
-                        meta.user.equal(user.getKey()),
-                        meta.startTime.lessThanOrEqual(startTime),
-                        meta.finishTime.greaterThanOrEqual(finishTime))
-                    .asList();
-                    */
             return Datastore.query(meta)
                     .filter(meta.user.equal(user.getKey()))
-                    .filterInMemory(meta.startTime.greaterThan(startTime))
+                    .filterInMemory(meta.startTime.greaterThanOrEqual(startTime))
                     .filterInMemory(meta.finishTime.lessThanOrEqual(finishTime))
                     .asList();
         } catch (Exception e) {
