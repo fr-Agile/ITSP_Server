@@ -40,7 +40,7 @@ public class RepeatScheduleService {
         try {
             return Datastore.query(meta)
                     .filter(meta.user.equal(user.getKey()))
-                    .filterInMemory(meta.startTime.greaterThan(startTime))
+                    .filterInMemory(meta.startTime.greaterThanOrEqual(startTime))
                     .filterInMemory(meta.finishTime.lessThanOrEqual(finishTime))
                     .asList();
         } catch (Exception e) {
@@ -48,4 +48,9 @@ public class RepeatScheduleService {
         }
     }
     
+    public static boolean deleteRepeatSchedule(String keyS) {
+        Key key = Datastore.stringToKey(keyS);
+        Datastore.delete(key);
+        return true;
+    }
 }

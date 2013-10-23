@@ -35,6 +35,12 @@ public class RepeatSchedule implements Serializable{
     
     @Attribute(name = "ex")
     private List<Date> excepts;
+    
+    @Attribute(name = "rB")
+    private long repeatBegin;
+    
+    @Attribute(name = "rE")
+    private long repeatEnd;
 
     public ModelRef<User> getUser() {
         return user;
@@ -93,7 +99,22 @@ public class RepeatSchedule implements Serializable{
     public void setExcepts(List<Date> excepts) {
         this.excepts = excepts;
     }
+    
+    public long getRepeatBegin() {
+        return repeatBegin;
+    }
 
+    public void setRepeatBegin(long repeatBegin) {
+        this.repeatBegin = repeatBegin;
+    }
+
+    public long getRepeatEnd() {
+        return repeatEnd;
+    }
+
+    public void setRepeatEnd(long repeatEnd) {
+        this.repeatEnd = repeatEnd;
+    }
 
     @Override
     public int hashCode() {
@@ -102,9 +123,6 @@ public class RepeatSchedule implements Serializable{
         result = prime * result + ((key == null) ? 0 : key.hashCode());
         return result;
     }
-
-
-    
 
 
     @Override
@@ -123,8 +141,6 @@ public class RepeatSchedule implements Serializable{
             return false;
         return true;
     }
-    
-    
     
     
 }

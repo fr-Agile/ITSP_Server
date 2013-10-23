@@ -134,47 +134,27 @@ public class ScheduleV1EndPoint {
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
         
         try {
-            User user = UserService.getUserByEmail(email);
-            
-            if (user == null) {
-                logger.warning("user not found");
-                result.setResult(FAIL);
-            } else {
-                for (ScheduleV1Dto scheduleDto : scheduleListContainer.getList()) {
-                    long startTime = scheduleDto.getStartTime();
-                    long finishTime = scheduleDto.getFinishTime();
-                    
-                    if (startTime < 0 || finishTime < 0) {
-                        logger.warning("time shold be positive");
-                        result.setResult(FAIL);
-                        break;
-                    } else if (startTime > finishTime) {
-                        logger.warning("startTime > finishTime");
-                        result.setResult(FAIL);
-                        break;
-                    } else {
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("startTime", startTime);
-                        map.put("finishTime", finishTime);
-                        
-                        Schedule schedule =
-                            ScheduleService.createSchedule(map, user);
-                        if (schedule == null) {
-                            logger.warning("schedule not added");
-                            result.setResult(FAIL);
-                            break;
-                        }
-                    }
+            for (ScheduleV1Dto scheduleDto : scheduleListContainer.getList()) {
+                long startTime = scheduleDto.getStartTime();
+                long finishTime = scheduleDto.getFinishTime();
+                
+                ScheduleResultV1Dto resultThisTime = 
+                        this.createSchedule(startTime, finishTime, email);
+                if (!SUCCESS.equals(resultThisTime.getResult())) {
+                    result.setResult(FAIL);
+                    break;
                 }
-                result.setResult(SUCCESS);
-                logger.warning("new schedule list added");
             }
+            result.setResult(SUCCESS);
+            logger.warning("new schedule list added");
+            
         } catch (Exception e) {
             logger.warning("Exception" + e);
             result.setResult(FAIL);
         }
         return result;
     }
+    
     public ScheduleResultV1Dto deleteAllSchedule(
             @Named("email") String email) {
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();

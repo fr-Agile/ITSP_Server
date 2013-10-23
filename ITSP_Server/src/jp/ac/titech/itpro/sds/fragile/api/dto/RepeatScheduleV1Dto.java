@@ -10,12 +10,19 @@ import javax.persistence.Entity;
 public class RepeatScheduleV1Dto {
     private long startTime;
     private long finishTime;
+    private long repeatBegin;
+    private long repeatEnd;
     private List<Integer> repeatDays;
     private List<Date> excepts;
     
-    public RepeatScheduleV1Dto(long startTime, long finishTime, List<Integer> repeatDays, List<Date> excepts) {
+    public RepeatScheduleV1Dto() {};
+    
+    public RepeatScheduleV1Dto(long startTime, long finishTime, long repeatBegin, long repeatEnd,
+            List<Integer> repeatDays, List<Date> excepts) {
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);
+        this.setRepeatBegin(repeatBegin);
+        this.setRepeatEnd(repeatEnd);
         this.setRepeatDays(repeatDays);
         this.setExcepts(excepts);
         
@@ -51,6 +58,22 @@ public class RepeatScheduleV1Dto {
 
     public void setExcepts(List<Date> excepts) {
         this.excepts = excepts;
+    }
+
+    public long getRepeatBegin() {
+        return repeatBegin;
+    }
+
+    public void setRepeatBegin(long repeatBegin) {
+        this.repeatBegin = repeatBegin;
+    }
+
+    public long getRepeatEnd() {
+        return repeatEnd;
+    }
+
+    public void setRepeatEnd(long repeatEnd) {
+        this.repeatEnd = repeatEnd;
     }
 
     
