@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/Ciq3UZvs_6pCWpyQShBjhNQ1dJo\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/Ciq3UZvs_6pCWpyQShBjhNQ1dJo\"",
  "discoveryVersion": "v1",
  "id": "registrationIdEndpoint:v1",
  "name": "registrationIdEndpoint",

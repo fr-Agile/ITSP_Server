@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/mPYzSMB53I0-9WE0BtkIkga_U1I\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/mPYzSMB53I0-9WE0BtkIkga_U1I\"",
  "discoveryVersion": "v1",
  "id": "loginEndpoint:v1",
  "name": "loginEndpoint",

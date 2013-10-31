@@ -72,6 +72,26 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "scheduleEndpoint.scheduleV1EndPoint.deleteAllSchedule" : {
+      "path" : "allschedule/{email}",
+      "httpMethod" : "DELETE",
+      "scopes" : [ ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.deleteAllSchedule",
+      "request" : {
+        "parameters" : {
+          "email" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "scheduleEndpoint.scheduleV1EndPoint.createSchedule" : {
       "path" : "createSchedule/{startTime}/{finishTime}/{email}",
       "httpMethod" : "POST",
@@ -127,6 +147,27 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "scheduleEndpoint.scheduleV1EndPoint.createScheduleList" : {
+      "path" : "createScheduleList/{email}",
+      "httpMethod" : "POST",
+      "scopes" : [ ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.createScheduleList",
+      "request" : {
+        "parameters" : {
+          "email" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
@@ -168,6 +209,18 @@
             }
           }
         }
+      },
+      "ScheduleListContainer" : {
+        "id" : "ScheduleListContainer",
+        "type" : "object",
+        "properties" : {
+          "list" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "ScheduleV1Dto"
+            }
+          }
+        }
       }
     },
     "methods" : {
@@ -181,12 +234,25 @@
           "$ref" : "ScheduleV1DtoCollection"
         }
       },
+      "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.deleteAllSchedule" : {
+        "response" : {
+          "$ref" : "ScheduleResultV1Dto"
+        }
+      },
       "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.createSchedule" : {
         "response" : {
           "$ref" : "ScheduleResultV1Dto"
         }
       },
       "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.editSchedule" : {
+        "response" : {
+          "$ref" : "ScheduleResultV1Dto"
+        }
+      },
+      "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.createScheduleList" : {
+        "request" : {
+          "$ref" : "ScheduleListContainer"
+        },
         "response" : {
           "$ref" : "ScheduleResultV1Dto"
         }

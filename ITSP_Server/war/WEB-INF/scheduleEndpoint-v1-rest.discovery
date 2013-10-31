@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/V-H4zcPbQi99tFy0pKG9jjONTiM\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/6un_qVFnkHmO1-Kif0ac5TLukDY\"",
  "discoveryVersion": "v1",
  "id": "scheduleEndpoint:v1",
  "name": "scheduleEndpoint",
@@ -62,6 +62,18 @@
   }
  },
  "schemas": {
+  "ScheduleListContainer": {
+   "id": "ScheduleListContainer",
+   "type": "object",
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "ScheduleV1Dto"
+     }
+    }
+   }
+  },
   "ScheduleResultV1Dto": {
    "id": "ScheduleResultV1Dto",
    "type": "object",
@@ -130,6 +142,46 @@
      "parameterOrder": [
       "startTime",
       "finishTime",
+      "email"
+     ],
+     "response": {
+      "$ref": "ScheduleResultV1Dto"
+     }
+    },
+    "createScheduleList": {
+     "id": "scheduleEndpoint.scheduleV1EndPoint.createScheduleList",
+     "path": "createScheduleList/{email}",
+     "httpMethod": "POST",
+     "parameters": {
+      "email": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "email"
+     ],
+     "request": {
+      "$ref": "ScheduleListContainer",
+      "parameterName": "resource"
+     },
+     "response": {
+      "$ref": "ScheduleResultV1Dto"
+     }
+    },
+    "deleteAllSchedule": {
+     "id": "scheduleEndpoint.scheduleV1EndPoint.deleteAllSchedule",
+     "path": "allschedule/{email}",
+     "httpMethod": "DELETE",
+     "parameters": {
+      "email": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
       "email"
      ],
      "response": {

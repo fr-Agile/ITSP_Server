@@ -1,5 +1,6 @@
 package jp.ac.titech.itpro.sds.fragile.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,13 +9,17 @@ import jp.ac.titech.itpro.sds.fragile.meta.RegistrationIdMeta;
 import jp.ac.titech.itpro.sds.fragile.model.Friend;
 import jp.ac.titech.itpro.sds.fragile.model.RegistrationId;
 import jp.ac.titech.itpro.sds.fragile.model.User;
+import jp.ac.titech.itpro.sds.fragile.utils.CommonUtils;
 import jp.ac.titech.itpro.sds.fragile.utils.Encrypter;
 
+import org.mortbay.log.Log;
 import org.slim3.datastore.Datastore;
 import org.slim3.util.BeanUtil;
 
+import com.google.android.gcm.server.*;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Transaction;
+
 
 public class RegisterAndroidService {
     private static RegistrationIdMeta meta = RegistrationIdMeta.get();
@@ -58,6 +63,22 @@ public class RegisterAndroidService {
                     .asSingle().getRegisterId();
             
         } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    // 端末のregistrationIDを指定してメッセージを送信
+    public static Result sendMessageFromRegisterId(String id, String msg) {
+        final int RETRY_COUNT = 5;
+        String registrationId = id;
+        Sender sender = new Sender(CommonUtils.GCM_API_KEY);
+        Message message = new Message.Builder().addData("msg", msg).build();
+
+        try {
+            Result result = sender.send(message, registrationId, RETRY_COUNT);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
