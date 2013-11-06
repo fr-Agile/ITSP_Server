@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.activation.DataSource;
 import javax.inject.Named;
+
+import org.slim3.datastore.Datastore;
 
 import jp.ac.titech.itpro.sds.fragile.api.container.StringListContainer;
 import jp.ac.titech.itpro.sds.fragile.api.dto.GroupResultV1Dto;
@@ -101,6 +104,7 @@ public class GroupV1Endpoint {
                         // グループの情報をDtoにつめる
                         GroupV1Dto groupDto = new GroupV1Dto();
                         groupDto.setName(group.getName());
+                        groupDto.setKey(Datastore.keyToString(group.getKey()));
                         UserV1Dto owner = new UserV1Dto();
                         CopyUtils.copyUser(owner, group.getUser().getModel());
                         groupDto.setOwner(owner);

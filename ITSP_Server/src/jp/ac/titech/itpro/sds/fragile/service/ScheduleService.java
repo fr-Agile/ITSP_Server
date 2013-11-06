@@ -1,11 +1,15 @@
 package jp.ac.titech.itpro.sds.fragile.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import jp.ac.titech.itpro.sds.fragile.meta.ScheduleMeta;
+import jp.ac.titech.itpro.sds.fragile.model.Group;
+import jp.ac.titech.itpro.sds.fragile.model.GroupScheduleMap;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
+import jp.ac.titech.itpro.sds.fragile.model.UserGroupMap;
 
 import org.slim3.datastore.Datastore;
 import org.slim3.util.BeanUtil;
@@ -26,6 +30,26 @@ public class ScheduleService {
         Datastore.put(schedule);
         tx.commit();
         return schedule;
+    }
+    
+    public static List<Schedule> createGroupSchedule(Map<String, Object> input, GroupScheduleMap groupScheduleMap) {
+        Group group = groupScheduleMap.getGroup().getModel();
+        List <UserGroupMap> userGroupMaps = group.getUserGroupMapListRef().getModelList();
+        List<Schedule> scheduleList = new ArrayList<Schedule>();
+        for (UserGroupMap userGroupMap : userGroupMaps) {
+            User user = userGroupMap.getUser().getModel();
+            Schedule schedule = new Schedule();
+            Key key = Datastore.allocateId(Schedule.class);
+            BeanUtil.copy(input, schedule);
+            schedule.setKey(key);
+            schedule.getUser().setModel(user);
+            Transaction tx = Datastore.beginTransaction();
+            Datastore.put(schedule);
+            tx.commit();
+            scheduleList.add(schedule);
+        }
+        return scheduleList;
+                
     }
     
     public static boolean deleteSchedule(String keyS) {

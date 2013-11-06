@@ -52,6 +52,14 @@ public class GroupService {
         }
     }
 
+    public static Group getGroup(Key groupKey) {
+        try {
+            return Datastore.query(meta).filter(meta.key.equal(groupKey)).asSingle();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
     public static Group getGroup(String name, User owner) {
         try {
             return Datastore

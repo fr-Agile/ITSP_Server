@@ -14,8 +14,12 @@ import jp.ac.titech.itpro.sds.fragile.api.container.ScheduleListContainer;
 import org.slim3.datastore.Datastore;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleV1Dto;
+import jp.ac.titech.itpro.sds.fragile.model.Group;
+import jp.ac.titech.itpro.sds.fragile.model.GroupScheduleMap;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
+import jp.ac.titech.itpro.sds.fragile.service.GroupScheduleMapService;
+import jp.ac.titech.itpro.sds.fragile.service.GroupService;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
 
@@ -62,6 +66,46 @@ public class ScheduleV1EndPoint {
                 } else {
                     result.setResult(SUCCESS);
                     logger.warning("new schedule added");
+                } 
+            }
+        } catch (Exception e) {
+            logger.warning("Exception" + e);
+            result.setResult(FAIL);
+        }
+        return result;
+    }
+    
+    public ScheduleResultV1Dto createGroupSchedule(
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime,
+            @Named("groupKey") String groupKey ){
+        ScheduleResultV1Dto result = new ScheduleResultV1Dto();
+        
+        Group group = GroupService.getGroup(Datastore.stringToKey(groupKey));
+        GroupScheduleMap groupScheduleMap = GroupScheduleMapService.createGroupScheduleMap(group);
+        try {
+            if (startTime < 0 || finishTime < 0) {
+                logger.warning("time should be positive");
+                result.setResult(FAIL);
+            } else if(startTime > finishTime) {
+                logger.warning("startTime > finishTime");
+                result.setResult(FAIL);
+            } else if (group == null){
+                logger.warning("user not found");
+                result.setResult(FAIL);
+            } else {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("startTime", startTime);
+                map.put("finishTime", finishTime);
+                
+                List<Schedule> scheduleList =
+                    ScheduleService.createGroupSchedule(map, groupScheduleMap);
+                if (scheduleList == null) {
+                    logger.warning("group schedule not found");
+                    result.setResult(FAIL);
+                } else {
+                    result.setResult(SUCCESS);
+                    logger.warning("new group schedule added");
                 } 
             }
         } catch (Exception e) {
