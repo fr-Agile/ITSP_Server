@@ -14,18 +14,16 @@ public class RepeatScheduleV1Dto {
     private long repeatEnd;
     private List<Integer> repeatDays;
     private List<Date> excepts;
+    private String key;
     
-    public RepeatScheduleV1Dto() {};
-    
-    public RepeatScheduleV1Dto(long startTime, long finishTime, long repeatBegin, long repeatEnd,
-            List<Integer> repeatDays, List<Date> excepts) {
+    public RepeatScheduleV1Dto(long startTime, long finishTime, long repeatBegin, long repeatEnd,List<Integer> repeatDays, String key,List<Date> excepts) {
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);
         this.setRepeatBegin(repeatBegin);
         this.setRepeatEnd(repeatEnd);
         this.setRepeatDays(repeatDays);
-        this.setExcepts(excepts);
-        
+        this.setKey(key);
+        this.setExcepts(excepts);        
     }
 
     public long getStartTime() {
@@ -76,5 +74,12 @@ public class RepeatScheduleV1Dto {
         this.repeatEnd = repeatEnd;
     }
 
+    public String getKey() {
+        return key;
+    }
+    
+    public void setKey(String key) {
+        this.key = key;
+    }
     
 }

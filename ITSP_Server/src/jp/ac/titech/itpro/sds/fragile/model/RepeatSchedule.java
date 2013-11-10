@@ -46,7 +46,6 @@ public class RepeatSchedule implements Serializable{
         return user;
     }
 
-
     public Key getKey() {
         return key;
     }
@@ -87,9 +86,6 @@ public class RepeatSchedule implements Serializable{
     public void setRepeatDays(List<Integer> repeatDays) {
         this.repeatDays = repeatDays;
     }
-    
-    
-
 
     public List<Date> getExcepts() {
         return excepts;
@@ -124,7 +120,6 @@ public class RepeatSchedule implements Serializable{
         return result;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -141,6 +136,5 @@ public class RepeatSchedule implements Serializable{
             return false;
         return true;
     }
-    
-    
+
 }
