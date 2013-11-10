@@ -1,12 +1,12 @@
 {
   "extends" : "thirdParty.api",
   "abstract" : false,
-  "root" : "https://fragile_t.appspot.com/_ah/api",
+  "root" : "https://fragile-t.appspot.com/_ah/api",
   "name" : "scheduleEndpoint",
   "version" : "v1",
   "defaultVersion" : false,
   "adapter" : {
-    "bns" : "https://fragile_t.appspot.com/_ah/spi",
+    "bns" : "https://fragile-t.appspot.com/_ah/spi",
     "deadline" : 10.0,
     "type" : "lily"
   },
@@ -168,6 +168,34 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "scheduleEndpoint.scheduleV1EndPoint.createGroupSchedule" : {
+      "path" : "createGroupSchedule/{startTime}/{finishTime}/{groupKey}",
+      "httpMethod" : "POST",
+      "scopes" : [ ],
+      "audiences" : [ ],
+      "clientIds" : [ ],
+      "rosyMethod" : "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.createGroupSchedule",
+      "request" : {
+        "parameters" : {
+          "startTime" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "finishTime" : {
+            "type" : "int64",
+            "required" : true
+          },
+          "groupKey" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
@@ -253,6 +281,11 @@
         "request" : {
           "$ref" : "ScheduleListContainer"
         },
+        "response" : {
+          "$ref" : "ScheduleResultV1Dto"
+        }
+      },
+      "jp.ac.titech.itpro.sds.fragile.api.ScheduleV1EndPoint.createGroupSchedule" : {
         "response" : {
           "$ref" : "ScheduleResultV1Dto"
         }

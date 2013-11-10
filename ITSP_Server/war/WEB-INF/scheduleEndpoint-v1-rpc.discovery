@@ -1,0 +1,274 @@
+{
+ "kind": "discovery#rpcDescription",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/tcNIp_14n7UCKH2Clhb3ONrtIxA\"",
+ "discoveryVersion": "v1",
+ "id": "scheduleEndpoint:v1",
+ "name": "scheduleEndpoint",
+ "version": "v1",
+ "description": "This is an API",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rpc",
+ "rootUrl": "https://fragile-t.appspot.com/_ah/api/",
+ "rpcUrl": "https://fragile-t.appspot.com/_ah/api/rpc",
+ "rpcPath": "/_ah/api/rpc",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "schemas": {
+  "ScheduleListContainer": {
+   "id": "ScheduleListContainer",
+   "type": "object",
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "ScheduleV1Dto"
+     }
+    }
+   }
+  },
+  "ScheduleResultV1Dto": {
+   "id": "ScheduleResultV1Dto",
+   "type": "object",
+   "properties": {
+    "result": {
+     "type": "string"
+    }
+   }
+  },
+  "ScheduleV1Dto": {
+   "id": "ScheduleV1Dto",
+   "type": "object",
+   "properties": {
+    "finishTime": {
+     "type": "string",
+     "format": "int64"
+    },
+    "key": {
+     "type": "string"
+    },
+    "startTime": {
+     "type": "string",
+     "format": "int64"
+    }
+   }
+  },
+  "ScheduleV1DtoCollection": {
+   "id": "ScheduleV1DtoCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "ScheduleV1Dto"
+     }
+    }
+   }
+  }
+ },
+ "methods": {
+  "scheduleEndpoint.scheduleV1EndPoint.createGroupSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.createGroupSchedule",
+   "parameters": {
+    "finishTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    },
+    "groupKey": {
+     "type": "string",
+     "required": true
+    },
+    "startTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "startTime",
+    "finishTime",
+    "groupKey"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.createSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.createSchedule",
+   "parameters": {
+    "email": {
+     "type": "string",
+     "required": true
+    },
+    "finishTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    },
+    "startTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "startTime",
+    "finishTime",
+    "email"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.createScheduleList": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.createScheduleList",
+   "parameters": {
+    "email": {
+     "type": "string",
+     "required": true
+    },
+    "resource": {
+     "$ref": "ScheduleListContainer"
+    }
+   },
+   "parameterOrder": [
+    "resource",
+    "email"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.deleteAllSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.deleteAllSchedule",
+   "parameters": {
+    "email": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "email"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.deleteSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.deleteSchedule",
+   "parameters": {
+    "keyS": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "keyS"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.editSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.editSchedule",
+   "parameters": {
+    "finishTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    },
+    "keyS": {
+     "type": "string",
+     "required": true
+    },
+    "startTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "keyS",
+    "startTime",
+    "finishTime"
+   ],
+   "returns": {
+    "$ref": "ScheduleResultV1Dto"
+   }
+  },
+  "scheduleEndpoint.scheduleV1EndPoint.getSchedule": {
+   "id": "scheduleEndpoint.scheduleV1EndPoint.getSchedule",
+   "allowGet": true,
+   "parameters": {
+    "email": {
+     "type": "string",
+     "required": true
+    },
+    "finishTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    },
+    "startTime": {
+     "type": "string",
+     "required": true,
+     "format": "int64"
+    }
+   },
+   "parameterOrder": [
+    "startTime",
+    "finishTime",
+    "email"
+   ],
+   "returns": {
+    "$ref": "ScheduleV1DtoCollection"
+   }
+  }
+ }
+}

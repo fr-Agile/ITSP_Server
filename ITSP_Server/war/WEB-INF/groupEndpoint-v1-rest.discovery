@@ -1,0 +1,187 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/4jWI0rc0KVR3AqBfD2ikZXSderc\"",
+ "discoveryVersion": "v1",
+ "id": "groupEndpoint:v1",
+ "name": "groupEndpoint",
+ "version": "v1",
+ "description": "This is an API",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://fragile-t.appspot.com/_ah/api/groupEndpoint/v1/",
+ "basePath": "/_ah/api/groupEndpoint/v1/",
+ "rootUrl": "https://fragile-t.appspot.com/_ah/api/",
+ "servicePath": "groupEndpoint/v1/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "schemas": {
+  "GroupResultV1Dto": {
+   "id": "GroupResultV1Dto",
+   "type": "object",
+   "properties": {
+    "result": {
+     "type": "string"
+    }
+   }
+  },
+  "GroupV1Dto": {
+   "id": "GroupV1Dto",
+   "type": "object",
+   "properties": {
+    "key": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "owner": {
+     "$ref": "UserV1Dto"
+    },
+    "userlList": {
+     "type": "array",
+     "items": {
+      "$ref": "UserV1Dto"
+     }
+    }
+   }
+  },
+  "GroupV1DtoCollection": {
+   "id": "GroupV1DtoCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "GroupV1Dto"
+     }
+    }
+   }
+  },
+  "StringListContainer": {
+   "id": "StringListContainer",
+   "type": "object",
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "UserV1Dto": {
+   "id": "UserV1Dto",
+   "type": "object",
+   "properties": {
+    "email": {
+     "type": "string"
+    },
+    "firstName": {
+     "type": "string"
+    },
+    "lastName": {
+     "type": "string"
+    }
+   }
+  }
+ },
+ "resources": {
+  "groupV1Endpoint": {
+   "methods": {
+    "getGroupList": {
+     "id": "groupEndpoint.groupV1Endpoint.getGroupList",
+     "path": "groupv1dtocollection/{email}",
+     "httpMethod": "GET",
+     "parameters": {
+      "email": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "email"
+     ],
+     "response": {
+      "$ref": "GroupV1DtoCollection"
+     }
+    },
+    "makeGroup": {
+     "id": "groupEndpoint.groupV1Endpoint.makeGroup",
+     "path": "makeGroup/{name}/{owner}",
+     "httpMethod": "POST",
+     "parameters": {
+      "name": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      },
+      "owner": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "name",
+      "owner"
+     ],
+     "request": {
+      "$ref": "StringListContainer",
+      "parameterName": "resource"
+     },
+     "response": {
+      "$ref": "GroupResultV1Dto"
+     }
+    }
+   }
+  }
+ }
+}
