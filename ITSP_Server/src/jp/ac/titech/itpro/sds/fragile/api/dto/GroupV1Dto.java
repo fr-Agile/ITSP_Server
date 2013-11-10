@@ -9,6 +9,7 @@ public class GroupV1Dto {
     private String name;
     private UserV1Dto owner;
     private List<UserV1Dto> userlList;
+    private String key;
     public String getName() {
         return name;
     }
@@ -27,4 +28,11 @@ public class GroupV1Dto {
     public void setUserlList(List<UserV1Dto> userlList) {
         this.userlList = userlList;
     }
+    public String getKey() {
+        return key;
+    }
+    public void setKey(String key) {
+        this.key = key;
+    }
+    
 }
