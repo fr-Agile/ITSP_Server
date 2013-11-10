@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
 import jp.ac.titech.itpro.sds.fragile.meta.ScheduleMeta;
 import jp.ac.titech.itpro.sds.fragile.model.Group;
 import jp.ac.titech.itpro.sds.fragile.model.GroupScheduleMap;
@@ -84,5 +85,28 @@ public class ScheduleService {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public static List<Schedule> getGoogleScheduleByUser(User user) {
+        try {
+            return Datastore.query(meta)
+                    .filter(meta.user.equal(user.getKey()))
+                    .filterInMemory(meta.googleId.notEqual(GoogleConstant.UNTIED_TO_GOOGLE))
+                    .asList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public static Schedule getScheduleByKey(String keyS) {
+        try {
+            Key key = Datastore.stringToKey(keyS);
+            return Datastore.query(meta)
+                    .filter(meta.key.equal(key))
+                    .asSingle();
+        } catch (Exception e) {
+            return null;
+        }
+        
     }
 }
