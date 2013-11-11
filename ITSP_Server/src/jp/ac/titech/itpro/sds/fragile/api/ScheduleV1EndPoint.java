@@ -20,6 +20,7 @@ import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.GroupScheduleMapService;
 import jp.ac.titech.itpro.sds.fragile.service.GroupService;
+import jp.ac.titech.itpro.sds.fragile.service.RegisterAndroidService;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
 
@@ -100,12 +101,26 @@ public class ScheduleV1EndPoint {
 
                 List<Schedule> scheduleList =
                     ScheduleService.createGroupSchedule(map, groupScheduleMap);
+                
+                
                 if (scheduleList == null) {
                     logger.warning("group schedule not found");
                     result.setResult(FAIL);
                 } else {
                     result.setResult(SUCCESS);
                     logger.warning("new group schedule added");
+                    
+                    // グループ参加者にプッシュ通知を送る
+                    for(int i = 0; i<scheduleList.size();++i) {
+                    	if(!scheduleList.get(i).getUser().getModel().equals(user)){
+                    		String regId = RegisterAndroidService.getRegisterIdFromUser(scheduleList.get(i).getUser().getModel());
+                    		RegisterAndroidService.sendGroupMessageFromRegisterId(regId, 
+                    																user.getUserName(), 
+                    																Long.toString(startTime),
+                    																Long.toString(finishTime),
+                    																scheduleList.get(i).getKey().toString());
+                    	}
+                    }
                 }
             }
         } catch (Exception e) {
