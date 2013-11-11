@@ -27,7 +27,7 @@ public class PushMessageV1Endpoint {
     private static String NULLUSER = "nullUser";
     private static String NULLMSG = "nullmsg";
 
-    public PushMessageResultV1Dto sendMessageFromRegisterId(@Named("msg") String msg, @Named("email") String email){
+    public PushMessageResultV1Dto sendMessageFromRegisterId(@Named("value") String value, @Named("msg") String msg, @Named("email") String email){
         
         PushMessageResultV1Dto result = new PushMessageResultV1Dto();
         
@@ -40,7 +40,7 @@ public class PushMessageV1Endpoint {
             } else {
                 if(RegisterAndroidService.getRegisterIdFromUser(user) == null){    
                     result.setResult(NULLID);
-                } else if(RegisterAndroidService.sendMessageFromRegisterId(RegisterAndroidService.getRegisterIdFromUser(user), msg) == null) {
+                } else if(RegisterAndroidService.sendMessageFromRegisterId(RegisterAndroidService.getRegisterIdFromUser(user), value, msg) == null) {
                     result.setResult(FAIL);
                 } else {
                     result.setResult(SUCCESS);

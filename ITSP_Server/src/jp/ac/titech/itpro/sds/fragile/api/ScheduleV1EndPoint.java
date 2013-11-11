@@ -115,6 +115,7 @@ public class ScheduleV1EndPoint {
                     	if(!scheduleList.get(i).getUser().getModel().equals(user)){
                     		String regId = RegisterAndroidService.getRegisterIdFromUser(scheduleList.get(i).getUser().getModel());
                     		RegisterAndroidService.sendGroupMessageFromRegisterId(regId, 
+                    																user.getEmail(),
                     																user.getUserName(), 
                     																Long.toString(startTime),
                     																Long.toString(finishTime),

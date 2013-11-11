@@ -68,12 +68,12 @@ public class RegisterAndroidService {
     }
     
     // 端末のregistrationIDを指定してメッセージを送信
-    public static Result sendMessageFromRegisterId(String id, String msg) {
+    public static Result sendMessageFromRegisterId(String id, String value, String msg) {
         final int RETRY_COUNT = 5;
         String registrationId = id;
         
         Sender sender = new Sender(CommonUtils.GCM_API_KEY);
-        Message message = new Message.Builder().addData("value", "addFriend").addData("msg", msg).build();
+        Message message = new Message.Builder().addData("value", value).addData("msg", msg).build();
         
         try {
             Result result = sender.send(message, registrationId, RETRY_COUNT);
@@ -85,11 +85,12 @@ public class RegisterAndroidService {
     }
     
     // 端末のregistrationIDを指定して、グループ作成時のメッセージを送信
-    public static Result sendGroupMessageFromRegisterId(String id, String address, String start, String end, String key){
+    public static Result sendGroupMessageFromRegisterId(String id, String email, String address, String start, String end, String key){
     	final int RETRY_COUNT = 5;
         
         Sender sender = new Sender(CommonUtils.GCM_API_KEY);
         Message message = new Message.Builder().addData("value", "groupSchedule")
+        									   .addData("email", email)
         									   .addData("address", address)
         									   .addData("start", start)
         									   .addData("end", end)
