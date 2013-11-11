@@ -1,10 +1,12 @@
 package jp.ac.titech.itpro.sds.fragile.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import jp.ac.titech.itpro.sds.fragile.meta.RepeatScheduleMeta;
 import jp.ac.titech.itpro.sds.fragile.model.RepeatSchedule;
+import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 
 import org.slim3.datastore.Datastore;
@@ -34,6 +36,16 @@ public class RepeatScheduleService {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public static void editRepeatSchedule(String keyS,Long startTime,Long finishTime,List<Integer> repeatDays,List<Date> excepts) {
+        Key key = Datastore.stringToKey(keyS);
+        RepeatSchedule rs = Datastore.get(RepeatSchedule.class,key);
+        rs.setStartTime(startTime);
+        rs.setFinishTime(finishTime);
+        rs.setRepeatDays(repeatDays);
+        rs.setExcepts(excepts);
+        Datastore.put(rs);
     }
 
     public static List<RepeatSchedule> getRepeatScheduleByUser(User user, Long startTime, Long finishTime) {

@@ -6,3 +6,4 @@
 /target
 /www-test 
 /.classpath
+.DS_Store
