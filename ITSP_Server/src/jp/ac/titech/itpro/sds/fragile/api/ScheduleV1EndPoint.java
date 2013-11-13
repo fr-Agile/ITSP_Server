@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.inject.Named;
 
 import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
+import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
 import jp.ac.titech.itpro.sds.fragile.api.container.ScheduleListContainer;
 
 import org.slim3.datastore.Datastore;
@@ -36,10 +37,20 @@ public class ScheduleV1EndPoint {
 
     private static final String SUCCESS = CommonConstant.SUCCESS;
     private static final String FAIL = CommonConstant.FAIL;
-
+    
     public ScheduleResultV1Dto createSchedule(
             @Named("startTime") long startTime,
-            @Named("finishTime") long finishTime, @Named("email") String email) {
+            @Named("finishTime") long finishTime,
+            @Named("email") String email){
+        return createScheduleWithGId(startTime, finishTime, 
+            GoogleConstant.UNTIED_TO_GOOGLE, email);
+    }
+    
+    public ScheduleResultV1Dto createScheduleWithGId(
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime,
+            @Named("googleId") String googleId,
+            @Named("email") String email){
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
 
         User user = UserService.getUserByEmail(email);
@@ -57,8 +68,10 @@ public class ScheduleV1EndPoint {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("startTime", startTime);
                 map.put("finishTime", finishTime);
-
-                Schedule schedule = ScheduleService.createSchedule(map, user);
+                map.put("googleId", googleId);
+                
+                Schedule schedule =
+                    ScheduleService.createSchedule(map, user);
                 if (schedule == null) {
                     logger.warning("schedule not found");
                     result.setResult(FAIL);
@@ -186,8 +199,32 @@ public class ScheduleV1EndPoint {
 
         return result;
     }
-
-    public ScheduleResultV1Dto createScheduleList(@Named("email") String email,
+    
+    public ScheduleV1Dto getScheduleByKeyS(
+            @Named("keyS") String keyS) {
+        try { 
+            Schedule schedule = ScheduleService.getScheduleByKey(keyS);
+            if (schedule == null) {
+                logger.warning("get schedule FAIL");
+                return null;
+            } else {
+                ScheduleV1Dto dto = 
+                        new ScheduleV1Dto(
+                            schedule.getStartTime(), 
+                            schedule.getFinishTime(),
+                            schedule.getGoogleId(), 
+                            Datastore.keyToString(schedule.getKey()));
+                return dto;
+            }
+        } catch (Exception e) {
+            logger.warning("get schedule FAIL");
+            logger.warning("Exception" + e);
+            return null;
+        }
+    }
+    
+    public ScheduleResultV1Dto createScheduleList (
+            @Named("email") String email,
             ScheduleListContainer scheduleListContainer) {
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
 
@@ -195,9 +232,13 @@ public class ScheduleV1EndPoint {
             for (ScheduleV1Dto scheduleDto : scheduleListContainer.getList()) {
                 long startTime = scheduleDto.getStartTime();
                 long finishTime = scheduleDto.getFinishTime();
-
-                ScheduleResultV1Dto resultThisTime =
-                    this.createSchedule(startTime, finishTime, email);
+                String googleId = scheduleDto.getGoogleId();
+                if (googleId == null || googleId.isEmpty()) {
+                	googleId = GoogleConstant.UNTIED_TO_GOOGLE;
+                }
+                
+                ScheduleResultV1Dto resultThisTime = 
+                        this.createScheduleWithGId(startTime, finishTime, googleId, email);
                 if (!SUCCESS.equals(resultThisTime.getResult())) {
                     result.setResult(FAIL);
                     break;
@@ -231,6 +272,33 @@ public class ScheduleV1EndPoint {
                 }
 
                 logger.warning("delete all schedule SUCCESS");
+                result.setResult(SUCCESS);
+            }
+        } catch (Exception e) {
+            logger.warning("Exception" + e);
+            result.setResult(FAIL);
+        }
+        return result;
+    }
+    
+    public ScheduleResultV1Dto deleteAllGoogleSchedule(
+            @Named("email") String email) {
+        ScheduleResultV1Dto result = new ScheduleResultV1Dto();
+        
+        try {
+            User user = UserService.getUserByEmail(email);
+            
+            if (user == null) {
+                logger.warning("user not found");
+                result.setResult(FAIL);
+            } else {
+            
+                List<Schedule> list = ScheduleService.getGoogleScheduleByUser(user);
+                for (Schedule schedule : list) {
+                    ScheduleService.deleteSchedule(Datastore.keyToString(schedule.getKey()));
+                }
+                
+                logger.warning("delete all google schedule SUCCESS");
                 result.setResult(SUCCESS);
             }
         } catch (Exception e) {

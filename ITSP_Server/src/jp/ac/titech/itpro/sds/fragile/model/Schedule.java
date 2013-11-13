@@ -30,6 +30,9 @@ public class Schedule implements Serializable {
     @Attribute(name = "fT")
     private long finishTime;
 
+    @Attribute(name = "gI")
+    private String googleId;
+    
     /**
      * Returns the user.
      *
@@ -117,6 +120,25 @@ public class Schedule implements Serializable {
      */
     public void setFinishTime(long finishTime) {
         this.finishTime = finishTime;
+    }
+    
+    /**
+     * Returns the google id.
+     *
+     * @return the google id
+     */
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    /**
+     * Sets the google id.
+     *
+     * @param googleId 
+     *            the google id
+     */
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
     
     @Override

@@ -7,14 +7,20 @@ import javax.persistence.Entity;
 public class ScheduleV1Dto {
     private long startTime;
     private long finishTime;
+    private String googleId;
     private String key;
     
     public ScheduleV1Dto() {
     }
     
-    public ScheduleV1Dto(long startTime, long finishTime,String key) {
+    public ScheduleV1Dto(long startTime, long finishTime, String key) {
+        this(startTime, finishTime, "notgoogle", key);
+    }
+    
+    public ScheduleV1Dto(long startTime, long finishTime, String googleId, String key) {
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);
+        this.setGoogleId(googleId);
         this.setKey(key);
     }
     
@@ -35,6 +41,14 @@ public class ScheduleV1Dto {
     }
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
     
 }
