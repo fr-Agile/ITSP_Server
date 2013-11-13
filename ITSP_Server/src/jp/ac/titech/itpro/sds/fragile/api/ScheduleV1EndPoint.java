@@ -119,7 +119,8 @@ public class ScheduleV1EndPoint {
                     																user.getUserName(), 
                     																Long.toString(startTime),
                     																Long.toString(finishTime),
-                    																scheduleList.get(i).getKey().toString());
+                    																Datastore.keyToString(scheduleList.get(i).getKey()));
+                    		
                     	}
                     }
                 }
