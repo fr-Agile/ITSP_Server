@@ -190,6 +190,7 @@ public class ScheduleV1EndPoint {
                         new ScheduleV1Dto(
                             schedule.getStartTime(),
                             schedule.getFinishTime(),
+                            schedule.getGoogleId(),
                             Datastore.keyToString(schedule.getKey()));
                     result.add(dto);
                 }
