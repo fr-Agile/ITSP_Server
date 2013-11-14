@@ -53,13 +53,16 @@ public class ScheduleV1EndPoint {
             @Named("email") String email){
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
 
-        User user = UserService.getUserByEmail(email);
         try {
+        	User user = UserService.getUserByEmail(email);
             if (startTime < 0 || finishTime < 0) {
                 logger.warning("time should be positive");
                 result.setResult(FAIL);
             } else if (startTime > finishTime) {
                 logger.warning("startTime > finishTime");
+                result.setResult(FAIL);
+            } else if (googleId == null) {
+                logger.warning("google id is null");
                 result.setResult(FAIL);
             } else if (user == null) {
                 logger.warning("user not found");
