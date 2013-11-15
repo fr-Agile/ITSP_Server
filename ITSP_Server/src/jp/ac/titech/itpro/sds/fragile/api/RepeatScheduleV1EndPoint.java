@@ -11,6 +11,8 @@ import javax.inject.Named;
 
 import org.slim3.datastore.Datastore;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
+import jp.ac.titech.itpro.sds.fragile.api.constant.RepeatConstant;
 import jp.ac.titech.itpro.sds.fragile.api.container.RepeatScheduleContainer;
 import jp.ac.titech.itpro.sds.fragile.api.container.RepeatScheduleListContainer;
 import jp.ac.titech.itpro.sds.fragile.api.dto.RepeatScheduleResultV1Dto;
@@ -37,10 +39,9 @@ public class RepeatScheduleV1EndPoint {
             @Named("finishTime") long finishTime,
             @Named("email") String email,
             RepeatScheduleContainer contain) {
-        // repeatBeginとrepeatEndが指定されなかった場合、いくらでも繰り返すようにする
-        // そのために、repeatBeginを0、repeatEndを最大値に設定
-        long repeatBegin = 0;
-        long repeatEnd = Long.MAX_VALUE;
+        // repeatBeginとrepeatEndが指定されなかった場合、2000年から3000年の間くり返すようにする
+        long repeatBegin = RepeatConstant.REPEAT_BEGIN;
+        long repeatEnd = RepeatConstant.REPEAT_END;
         return createRepeatScheduleWithTerm(startTime, finishTime, 
             repeatBegin, repeatEnd, email, contain);
     }
@@ -51,9 +52,22 @@ public class RepeatScheduleV1EndPoint {
             @Named("repeatEnd") long repeatEnd,
             @Named("email") String email,
             RepeatScheduleContainer contain) {
+    	
+    	return createRepeatScheduleWithGId(startTime, finishTime, repeatBegin, repeatEnd,
+    			GoogleConstant.UNTIED_TO_GOOGLE, email, contain);
+    }
+    public RepeatScheduleResultV1Dto createRepeatScheduleWithGId(
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime,
+            @Named("repeatBegin") long repeatBegin,
+            @Named("repeatEnd") long repeatEnd,
+            @Named("googleId") String googleId,
+            @Named("email") String email,
+            RepeatScheduleContainer contain) {
+    	
         RepeatScheduleResultV1Dto result = new RepeatScheduleResultV1Dto();
-        User user = UserService.getUserByEmail(email);
         try {
+        	User user = UserService.getUserByEmail(email);
             if (startTime < 0 || finishTime < 0) {
                 logger.warning("startTime < 0 || finishTime < 0");
                 result.setResult(FAIL);
@@ -66,6 +80,9 @@ public class RepeatScheduleV1EndPoint {
             } else if (repeatBegin >= repeatEnd) {
                 logger.warning("repeatBegin >= repeatEnd");
                 result.setResult(FAIL);
+            } else if (googleId == null) {
+                logger.warning("google id is null");
+                result.setResult(FAIL);
             } else if (user == null) {
                 logger.warning("RS user not found");
                 result.setResult(FAIL);
@@ -75,6 +92,7 @@ public class RepeatScheduleV1EndPoint {
                 map.put("finishTime", finishTime);
                 map.put("repeatBegin", repeatBegin);
                 map.put("repeatEnd", repeatEnd);
+                map.put("googleId", googleId);
                 
                 List<Integer> repeatDays = contain.getIntegers();
                 List<Date> excepts = contain.getDates();
@@ -140,7 +158,8 @@ public class RepeatScheduleV1EndPoint {
                         repeatSchedule.getRepeatEnd(),
                         repeatSchedule.getRepeatDays(),
                         Datastore.keyToString(repeatSchedule.getKey()),
-                        repeatSchedule.getExcepts());
+                        repeatSchedule.getExcepts(),
+                        repeatSchedule.getGoogleId());
                     result.add(dto);
                 }
             }
@@ -176,13 +195,14 @@ public class RepeatScheduleV1EndPoint {
                 long finishTime = repeatScheduleDto.getFinishTime();
                 long repeatBegin = repeatScheduleDto.getRepeatBegin();
                 long repeatEnd = repeatScheduleDto.getRepeatEnd();
+                String googleId = repeatScheduleDto.getGoogleId();
                 RepeatScheduleContainer contain = new RepeatScheduleContainer();
                 contain.setIntegers(repeatScheduleDto.getRepeatDays());
                 contain.setDates(repeatScheduleDto.getExcepts());
                 
                 RepeatScheduleResultV1Dto resultThisTime = 
-                        this.createRepeatScheduleWithTerm(startTime, finishTime, 
-                            repeatBegin, repeatEnd, email, contain);
+                        this.createRepeatScheduleWithGId(startTime, finishTime, 
+                            repeatBegin, repeatEnd, googleId, email, contain);
                 if (!SUCCESS.equals(resultThisTime.getResult())) {
                     result.setResult(FAIL);
                     break;
@@ -221,6 +241,34 @@ public class RepeatScheduleV1EndPoint {
             }
         } catch (Exception e) {
             logger.warning("Exception" + e);
+            result.setResult(FAIL);
+        }
+        return result;
+    }
+    
+    public RepeatScheduleResultV1Dto deleteAllGoogleRepeatSchedule(
+            @Named("email") String email) {
+        RepeatScheduleResultV1Dto result = new RepeatScheduleResultV1Dto();
+        
+        try {
+            User user = UserService.getUserByEmail(email);
+            
+            if (user == null) {
+                logger.warning("user not found");
+                result.setResult(FAIL);
+            } else {
+            
+                List<RepeatSchedule> list = RepeatScheduleService.getGoogleRepeatScheduleByUser(user);
+                for (RepeatSchedule repeatSchedule : list) {
+                    RepeatScheduleService.deleteRepeatSchedule(
+                        Datastore.keyToString(repeatSchedule.getKey()));
+                }
+                
+                logger.warning("delete all google repeat schedule SUCCESS");
+                result.setResult(SUCCESS);
+            }
+        } catch (Exception e) {
+            logger.warning("Exception: " + e);
             result.setResult(FAIL);
         }
         return result;

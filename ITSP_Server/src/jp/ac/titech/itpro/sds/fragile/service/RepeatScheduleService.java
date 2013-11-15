@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
 import jp.ac.titech.itpro.sds.fragile.meta.RepeatScheduleMeta;
 import jp.ac.titech.itpro.sds.fragile.model.RepeatSchedule;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
@@ -38,6 +39,17 @@ public class RepeatScheduleService {
         }
     }
     
+    public static List<RepeatSchedule> getGoogleRepeatScheduleByUser(User user) {
+        try {
+            return Datastore.query(meta)
+            		.filter(meta.user.equal(user.getKey()))
+            		.filterInMemory(meta.googleId.notEqual(GoogleConstant.UNTIED_TO_GOOGLE))
+            		.asList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
     public static void editRepeatSchedule(String keyS,Long startTime,Long finishTime,List<Integer> repeatDays,List<Date> excepts) {
         Key key = Datastore.stringToKey(keyS);
         RepeatSchedule rs = Datastore.get(RepeatSchedule.class,key);
@@ -59,6 +71,18 @@ public class RepeatScheduleService {
             return null;
         }
     }
+    
+    public static RepeatSchedule getRepeatScheduleByKey(String keyS) {
+        try {
+        	Key key = Datastore.stringToKey(keyS);
+            return Datastore.query(meta)
+                    .filter(meta.key.equal(key))
+                    .asSingle();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
     
     public static boolean deleteRepeatSchedule(String keyS) {
         Key key = Datastore.stringToKey(keyS);

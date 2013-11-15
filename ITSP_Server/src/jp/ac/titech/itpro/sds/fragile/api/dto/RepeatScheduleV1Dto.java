@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
+
 @Entity
 public class RepeatScheduleV1Dto {
     private long startTime;
@@ -15,8 +17,12 @@ public class RepeatScheduleV1Dto {
     private List<Integer> repeatDays;
     private List<Date> excepts;
     private String key;
+    private String googleId;
     
-    public RepeatScheduleV1Dto(long startTime, long finishTime, long repeatBegin, long repeatEnd,List<Integer> repeatDays, String key,List<Date> excepts) {
+    public RepeatScheduleV1Dto() {}		// List<RepeatScheduleV1Dto> に必要
+    
+    public RepeatScheduleV1Dto(long startTime, long finishTime, long repeatBegin, long repeatEnd,
+    		List<Integer> repeatDays, String key,List<Date> excepts, String googleId) {
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);
         this.setRepeatBegin(repeatBegin);
@@ -24,6 +30,7 @@ public class RepeatScheduleV1Dto {
         this.setRepeatDays(repeatDays);
         this.setKey(key);
         this.setExcepts(excepts);        
+        this.setGoogleId(googleId);
     }
 
     public long getStartTime() {
@@ -81,5 +88,13 @@ public class RepeatScheduleV1Dto {
     public void setKey(String key) {
         this.key = key;
     }
+
+	public String getGoogleId() {
+		return googleId;
+	}
+
+	public void setGoogleId(String googleId) {
+		this.googleId = googleId;
+	}
     
 }
