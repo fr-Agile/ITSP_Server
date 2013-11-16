@@ -59,6 +59,17 @@ public class RepeatScheduleService {
         rs.setExcepts(excepts);
         Datastore.put(rs);
     }
+    
+    public static void editRepeatSchedule(String keyS,Long startTime,Long finishTime, List<Integer> repeatDays,List<Date> excepts, String googleId) {
+        Key key = Datastore.stringToKey(keyS);
+        RepeatSchedule rs = Datastore.get(RepeatSchedule.class,key);
+        rs.setStartTime(startTime);
+        rs.setFinishTime(finishTime);
+        rs.setRepeatDays(repeatDays);
+        rs.setExcepts(excepts);
+        rs.setGoogleId(googleId);
+        Datastore.put(rs);
+    }
 
     public static List<RepeatSchedule> getRepeatScheduleByUser(User user, Long startTime, Long finishTime) {
         try {

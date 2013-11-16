@@ -170,6 +170,20 @@ public class ScheduleV1EndPoint {
         }
         return result;
     }
+    
+    public ScheduleResultV1Dto editScheduleWithGId(@Named("keyS") String keyS,
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime,
+            @Named("googleId") String googleId) {
+        ScheduleResultV1Dto result = new ScheduleResultV1Dto();
+        if (keyS != null) {
+            ScheduleService.editSchedule(keyS, startTime, finishTime, googleId);
+            result.setResult(SUCCESS);
+        } else {
+            result.setResult(FAIL);
+        }
+        return result;
+    }
 
     public List<ScheduleV1Dto> getSchedule(@Named("startTime") long startTime,
             @Named("finishTime") long finishTime, @Named("email") String email) {

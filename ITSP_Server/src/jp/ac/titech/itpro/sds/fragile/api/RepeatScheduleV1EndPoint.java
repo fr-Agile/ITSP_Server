@@ -12,7 +12,6 @@ import javax.inject.Named;
 import org.slim3.datastore.Datastore;
 
 import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
-import jp.ac.titech.itpro.sds.fragile.api.constant.RepeatConstant;
 import jp.ac.titech.itpro.sds.fragile.api.container.RepeatScheduleContainer;
 import jp.ac.titech.itpro.sds.fragile.api.container.RepeatScheduleListContainer;
 import jp.ac.titech.itpro.sds.fragile.api.dto.RepeatScheduleResultV1Dto;
@@ -34,17 +33,6 @@ public class RepeatScheduleV1EndPoint {
     private static String SUCCESS = "success";
     private static String FAIL = "fail";
     
-    public RepeatScheduleResultV1Dto createRepeatSchedule(
-            @Named("startTime") long startTime,
-            @Named("finishTime") long finishTime,
-            @Named("email") String email,
-            RepeatScheduleContainer contain) {
-        // repeatBeginとrepeatEndが指定されなかった場合、2000年から3000年の間くり返すようにする
-        long repeatBegin = RepeatConstant.REPEAT_BEGIN;
-        long repeatEnd = RepeatConstant.REPEAT_END;
-        return createRepeatScheduleWithTerm(startTime, finishTime, 
-            repeatBegin, repeatEnd, email, contain);
-    }
     public RepeatScheduleResultV1Dto createRepeatScheduleWithTerm(
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
@@ -127,12 +115,30 @@ public class RepeatScheduleV1EndPoint {
             List<Integer> repeatDays = contain.getIntegers();
             List<Date> excepts = contain.getDates();
             RepeatScheduleService.editRepeatSchedule(keyS,startTime,finishTime,repeatDays,excepts);
-                result.setResult(SUCCESS);
-            }else{
-                result.setResult(FAIL);
-            }
-            return result;
+            result.setResult(SUCCESS);
+        }else{
+            result.setResult(FAIL);
         }
+        return result;
+    }
+    
+    public RepeatScheduleResultV1Dto editRepeatScheduleWithGId(
+            @Named("keyS") String keyS,
+            @Named("startTime") long startTime,
+            @Named("finishTime") long finishTime,
+            RepeatScheduleContainer contain,
+            @Named("googleId") String googleId) {
+        RepeatScheduleResultV1Dto result = new RepeatScheduleResultV1Dto();    
+        if(keyS != null){    
+            List<Integer> repeatDays = contain.getIntegers();
+            List<Date> excepts = contain.getDates();
+            RepeatScheduleService.editRepeatSchedule(keyS,startTime,finishTime,repeatDays,excepts,googleId);
+            result.setResult(SUCCESS);
+        }else{
+            result.setResult(FAIL);
+        }
+        return result;
+    }
     
     public List<RepeatScheduleV1Dto> getRepeatSchedule(
         @Named("startTime") long startTime,
@@ -168,6 +174,31 @@ public class RepeatScheduleV1EndPoint {
         }
         return result;
     }
+    
+    public RepeatScheduleV1Dto getRepeatScheduleByKeyS(@Named("keyS") String keyS) {
+        RepeatScheduleV1Dto result = null;
+
+        try {
+            RepeatSchedule repeatSchedule = RepeatScheduleService.getRepeatScheduleByKey(keyS);
+            if (repeatSchedule == null) {
+                logger.warning("repeat schedule not found");
+            } else {
+                result = new RepeatScheduleV1Dto(
+                    repeatSchedule.getStartTime(), 
+                    repeatSchedule.getFinishTime(), 
+                    repeatSchedule.getRepeatBegin(),
+                    repeatSchedule.getRepeatEnd(),
+                    repeatSchedule.getRepeatDays(),
+                    Datastore.keyToString(repeatSchedule.getKey()),
+                    repeatSchedule.getExcepts(),
+                    repeatSchedule.getGoogleId());
+            }
+        } catch (Exception e) {
+            logger.warning("Exception" + e);
+        }
+        return result;
+    }
+    
     
     public RepeatScheduleResultV1Dto deleteRepeatSchedule(@Named("keyS") String keyS){
         RepeatScheduleResultV1Dto result = new RepeatScheduleResultV1Dto();    

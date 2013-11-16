@@ -67,6 +67,16 @@ public class ScheduleService {
         Datastore.put(schedule);
     }
     
+    public static void editSchedule(String keyS, long startTime,
+            long finishTime, String googleId) {
+        Key key = Datastore.stringToKey(keyS);
+        Schedule schedule = Datastore.get(Schedule.class,key);
+        schedule.setStartTime(startTime);
+        schedule.setFinishTime(finishTime);
+        schedule.setGoogleId(googleId);
+        Datastore.put(schedule);
+    }
+    
     public static List<Schedule> getScheduleByUser(User user) {
         try {
             return Datastore.query(meta).filter(meta.user.equal(user.getKey())).asList();
@@ -109,4 +119,5 @@ public class ScheduleService {
         }
         
     }
+
 }
