@@ -108,6 +108,18 @@ public class RepeatScheduleV1EndPoint {
         return result;
     }
     
+    public RepeatScheduleV1Dto getRepeatScheduleByKey(@Named("keyS") String keyS){
+    	RepeatSchedule repeatSchedule = RepeatScheduleService.getRepeatScheduleByKey(keyS);
+    	RepeatScheduleV1Dto result = new RepeatScheduleV1Dto(
+                repeatSchedule.getStartTime(), 
+                repeatSchedule.getFinishTime(), 
+                repeatSchedule.getRepeatBegin(),
+                repeatSchedule.getRepeatEnd(),
+                repeatSchedule.getRepeatDays(),
+                Datastore.keyToString(repeatSchedule.getKey()),
+                repeatSchedule.getExcepts());    
+        return result;
+    }
     public RepeatScheduleResultV1Dto editRepeatSchedule(
             @Named("keyS") String keyS,
             @Named("name") String name,
