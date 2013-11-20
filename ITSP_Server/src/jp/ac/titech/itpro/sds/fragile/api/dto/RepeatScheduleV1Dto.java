@@ -10,6 +10,7 @@ import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
 
 @Entity
 public class RepeatScheduleV1Dto {
+    private String name;
     private long startTime;
     private long finishTime;
     private long repeatBegin;
@@ -21,8 +22,9 @@ public class RepeatScheduleV1Dto {
     
     public RepeatScheduleV1Dto() {}		// List<RepeatScheduleV1Dto> に必要
     
-    public RepeatScheduleV1Dto(long startTime, long finishTime, long repeatBegin, long repeatEnd,
+    public RepeatScheduleV1Dto(String name, long startTime, long finishTime, long repeatBegin, long repeatEnd,
     		List<Integer> repeatDays, String key,List<Date> excepts, String googleId) {
+        this.setName(name);
         this.setStartTime(startTime);
         this.setFinishTime(finishTime);
         this.setRepeatBegin(repeatBegin);
@@ -88,6 +90,14 @@ public class RepeatScheduleV1Dto {
     public void setKey(String key) {
         this.key = key;
     }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getGoogleId() {
 		return googleId;

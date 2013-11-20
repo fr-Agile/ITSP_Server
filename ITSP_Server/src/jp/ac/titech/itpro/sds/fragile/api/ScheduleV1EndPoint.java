@@ -39,14 +39,16 @@ public class ScheduleV1EndPoint {
     private static final String FAIL = CommonConstant.FAIL;
     
     public ScheduleResultV1Dto createSchedule(
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             @Named("email") String email){
-        return createScheduleWithGId(startTime, finishTime, 
+        return createScheduleWithGId(name, startTime, finishTime, 
             GoogleConstant.UNTIED_TO_GOOGLE, email);
     }
     
     public ScheduleResultV1Dto createScheduleWithGId(
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             @Named("googleId") String googleId,
@@ -74,7 +76,7 @@ public class ScheduleV1EndPoint {
                 map.put("googleId", googleId);
                 
                 Schedule schedule =
-                    ScheduleService.createSchedule(map, user);
+                    ScheduleService.createSchedule(name, map, user);
                 if (schedule == null) {
                     logger.warning("schedule not found");
                     result.setResult(FAIL);
@@ -91,6 +93,7 @@ public class ScheduleV1EndPoint {
     }
 
     public ScheduleResultV1Dto createGroupSchedule(
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime, @Named("email") String email,
             @Named("groupKey") String groupKey) {
@@ -116,7 +119,7 @@ public class ScheduleV1EndPoint {
                 map.put("finishTime", finishTime);
 
                 List<Schedule> scheduleList =
-                    ScheduleService.createGroupSchedule(map, groupScheduleMap);
+                    ScheduleService.createGroupSchedule(name, map, groupScheduleMap);
                 
                 
                 if (scheduleList == null) {
@@ -159,11 +162,12 @@ public class ScheduleV1EndPoint {
     }
 
     public ScheduleResultV1Dto editSchedule(@Named("keyS") String keyS,
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime) {
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
         if (keyS != null) {
-            ScheduleService.editSchedule(keyS, startTime, finishTime);
+            ScheduleService.editSchedule(keyS, name, startTime, finishTime);
             result.setResult(SUCCESS);
         } else {
             result.setResult(FAIL);
@@ -172,12 +176,13 @@ public class ScheduleV1EndPoint {
     }
     
     public ScheduleResultV1Dto editScheduleWithGId(@Named("keyS") String keyS,
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             @Named("googleId") String googleId) {
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
         if (keyS != null) {
-            ScheduleService.editSchedule(keyS, startTime, finishTime, googleId);
+            ScheduleService.editSchedule(keyS, name, startTime, finishTime, googleId);
             result.setResult(SUCCESS);
         } else {
             result.setResult(FAIL);
@@ -202,6 +207,7 @@ public class ScheduleV1EndPoint {
                 for (Schedule schedule : schedules) {
                     ScheduleV1Dto dto =
                         new ScheduleV1Dto(
+                            schedule.getName(),
                             schedule.getStartTime(),
                             schedule.getFinishTime(),
                             schedule.getGoogleId(),
@@ -228,6 +234,7 @@ public class ScheduleV1EndPoint {
             } else {
                 ScheduleV1Dto dto = 
                         new ScheduleV1Dto(
+                            schedule.getName(),
                             schedule.getStartTime(), 
                             schedule.getFinishTime(),
                             schedule.getGoogleId(), 
@@ -248,6 +255,7 @@ public class ScheduleV1EndPoint {
 
         try {
             for (ScheduleV1Dto scheduleDto : scheduleListContainer.getList()) {
+                String name = scheduleDto.getName();
                 long startTime = scheduleDto.getStartTime();
                 long finishTime = scheduleDto.getFinishTime();
                 String googleId = scheduleDto.getGoogleId();
@@ -256,7 +264,7 @@ public class ScheduleV1EndPoint {
                 }
                 
                 ScheduleResultV1Dto resultThisTime = 
-                        this.createScheduleWithGId(startTime, finishTime, googleId, email);
+                        this.createScheduleWithGId(name, startTime, finishTime, googleId, email);
                 if (!SUCCESS.equals(resultThisTime.getResult())) {
                     result.setResult(FAIL);
                     break;

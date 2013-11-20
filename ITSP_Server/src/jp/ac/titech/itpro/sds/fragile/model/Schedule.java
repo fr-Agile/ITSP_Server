@@ -24,6 +24,9 @@ public class Schedule implements Serializable {
     @Attribute(version = true)
     private Long version;
     
+    @Attribute(name = "nA")
+    private String name;
+    
     @Attribute(name = "sT")
     private long startTime;
     
@@ -84,6 +87,25 @@ public class Schedule implements Serializable {
         this.version = version;
     }
 
+    /**
+     * Returns the name.
+     *
+     * @return the name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the name.
+     *
+     * @param name
+     *            the name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     /**
      * Returns the start time.
      *

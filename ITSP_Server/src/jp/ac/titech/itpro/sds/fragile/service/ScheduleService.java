@@ -21,11 +21,12 @@ import com.google.appengine.api.datastore.Transaction;
 public class ScheduleService {
     private static ScheduleMeta meta = ScheduleMeta.get();
 
-    public static Schedule createSchedule(Map<String, Object> input, User user) {
+    public static Schedule createSchedule(String name, Map<String, Object> input, User user) {
         Schedule schedule = new Schedule();
         Key key = Datastore.allocateId(Schedule.class);
         BeanUtil.copy(input, schedule);
         schedule.setKey(key);
+        schedule.setName(name);
         schedule.getUser().setModel(user);
         Transaction tx = Datastore.beginTransaction();
         Datastore.put(schedule);
@@ -33,7 +34,7 @@ public class ScheduleService {
         return schedule;
     }
     
-    public static List<Schedule> createGroupSchedule(Map<String, Object> input, GroupScheduleMap groupScheduleMap) {
+    public static List<Schedule> createGroupSchedule(String name, Map<String, Object> input, GroupScheduleMap groupScheduleMap) {
         Group group = groupScheduleMap.getGroup().getModel();
         List <UserGroupMap> userGroupMaps = group.getUserGroupMapListRef().getModelList();
         List<Schedule> scheduleList = new ArrayList<Schedule>();
@@ -43,6 +44,7 @@ public class ScheduleService {
             Key key = Datastore.allocateId(Schedule.class);
             BeanUtil.copy(input, schedule);
             schedule.setKey(key);
+            schedule.setName(name);
             schedule.getUser().setModel(user);
             Transaction tx = Datastore.beginTransaction();
             Datastore.put(schedule);
@@ -59,18 +61,20 @@ public class ScheduleService {
         return true;
     }
     
-    public static void editSchedule(String keyS,Long startTime,Long finishTime) {
+    public static void editSchedule(String keyS, String name, Long startTime, Long finishTime) {
         Key key = Datastore.stringToKey(keyS);
         Schedule schedule = Datastore.get(Schedule.class,key);
+        schedule.setName(name);
         schedule.setStartTime(startTime);
         schedule.setFinishTime(finishTime);
         Datastore.put(schedule);
     }
     
-    public static void editSchedule(String keyS, long startTime,
+    public static void editSchedule(String keyS, String name, long startTime,
             long finishTime, String googleId) {
         Key key = Datastore.stringToKey(keyS);
         Schedule schedule = Datastore.get(Schedule.class,key);
+        schedule.setName(name);
         schedule.setStartTime(startTime);
         schedule.setFinishTime(finishTime);
         schedule.setGoogleId(googleId);

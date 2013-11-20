@@ -50,9 +50,10 @@ public class RepeatScheduleService {
         }
     }
     
-    public static void editRepeatSchedule(String keyS,Long startTime,Long finishTime,List<Integer> repeatDays,List<Date> excepts) {
+    public static void editRepeatSchedule(String keyS,String name,Long startTime,Long finishTime,List<Integer> repeatDays,List<Date> excepts) {
         Key key = Datastore.stringToKey(keyS);
         RepeatSchedule rs = Datastore.get(RepeatSchedule.class,key);
+        rs.setName(name);
         rs.setStartTime(startTime);
         rs.setFinishTime(finishTime);
         rs.setRepeatDays(repeatDays);
@@ -60,9 +61,10 @@ public class RepeatScheduleService {
         Datastore.put(rs);
     }
     
-    public static void editRepeatSchedule(String keyS,Long startTime,Long finishTime, List<Integer> repeatDays,List<Date> excepts, String googleId) {
+    public static void editRepeatSchedule(String keyS,String name,Long startTime,Long finishTime, List<Integer> repeatDays,List<Date> excepts, String googleId) {
         Key key = Datastore.stringToKey(keyS);
         RepeatSchedule rs = Datastore.get(RepeatSchedule.class,key);
+        rs.setName(name);
         rs.setStartTime(startTime);
         rs.setFinishTime(finishTime);
         rs.setRepeatDays(repeatDays);

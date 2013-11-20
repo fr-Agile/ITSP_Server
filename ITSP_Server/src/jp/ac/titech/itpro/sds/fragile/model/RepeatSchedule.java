@@ -41,6 +41,9 @@ public class RepeatSchedule implements Serializable{
     
     @Attribute(name = "rE")
     private long repeatEnd;
+
+    @Attribute(name = "nA")
+    private String name;
     
     @Attribute(name = "gI")
     private String googleId;
@@ -115,6 +118,14 @@ public class RepeatSchedule implements Serializable{
         this.repeatEnd = repeatEnd;
     }
     
+    public String getName() {
+    	return name;
+    }
+
+    public void setName(String name) {
+    	this.name = name;
+    }
+
     public String getGoogleId() {
     	return googleId;
     }

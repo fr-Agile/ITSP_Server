@@ -34,6 +34,7 @@ public class RepeatScheduleV1EndPoint {
     private static String FAIL = "fail";
     
     public RepeatScheduleResultV1Dto createRepeatScheduleWithTerm(
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             @Named("repeatBegin") long repeatBegin,
@@ -41,10 +42,11 @@ public class RepeatScheduleV1EndPoint {
             @Named("email") String email,
             RepeatScheduleContainer contain) {
     	
-    	return createRepeatScheduleWithGId(startTime, finishTime, repeatBegin, repeatEnd,
+    	return createRepeatScheduleWithGId(name, startTime, finishTime, repeatBegin, repeatEnd,
     			GoogleConstant.UNTIED_TO_GOOGLE, email, contain);
     }
     public RepeatScheduleResultV1Dto createRepeatScheduleWithGId(
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             @Named("repeatBegin") long repeatBegin,
@@ -76,6 +78,7 @@ public class RepeatScheduleV1EndPoint {
                 result.setResult(FAIL);
             } else {
                 Map<String, Object> map = new HashMap<String, Object>();
+                map.put("name", name);
                 map.put("startTime", startTime);
                 map.put("finishTime", finishTime);
                 map.put("repeatBegin", repeatBegin);
@@ -107,6 +110,7 @@ public class RepeatScheduleV1EndPoint {
     
     public RepeatScheduleResultV1Dto editRepeatSchedule(
             @Named("keyS") String keyS,
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             RepeatScheduleContainer contain){
@@ -114,7 +118,7 @@ public class RepeatScheduleV1EndPoint {
         if(keyS != null){    
             List<Integer> repeatDays = contain.getIntegers();
             List<Date> excepts = contain.getDates();
-            RepeatScheduleService.editRepeatSchedule(keyS,startTime,finishTime,repeatDays,excepts);
+            RepeatScheduleService.editRepeatSchedule(keyS,name,startTime,finishTime,repeatDays,excepts);
             result.setResult(SUCCESS);
         }else{
             result.setResult(FAIL);
@@ -124,6 +128,7 @@ public class RepeatScheduleV1EndPoint {
     
     public RepeatScheduleResultV1Dto editRepeatScheduleWithGId(
             @Named("keyS") String keyS,
+            @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime,
             RepeatScheduleContainer contain,
@@ -132,7 +137,7 @@ public class RepeatScheduleV1EndPoint {
         if(keyS != null){    
             List<Integer> repeatDays = contain.getIntegers();
             List<Date> excepts = contain.getDates();
-            RepeatScheduleService.editRepeatSchedule(keyS,startTime,finishTime,repeatDays,excepts,googleId);
+            RepeatScheduleService.editRepeatSchedule(keyS,name,startTime,finishTime,repeatDays,excepts,googleId);
             result.setResult(SUCCESS);
         }else{
             result.setResult(FAIL);
@@ -158,6 +163,7 @@ public class RepeatScheduleV1EndPoint {
             } else {
                 for (RepeatSchedule repeatSchedule : repeatSchedules) {
                     RepeatScheduleV1Dto dto = new RepeatScheduleV1Dto(
+                        repeatSchedule.getName(), 
                         repeatSchedule.getStartTime(), 
                         repeatSchedule.getFinishTime(), 
                         repeatSchedule.getRepeatBegin(),
@@ -184,6 +190,7 @@ public class RepeatScheduleV1EndPoint {
                 logger.warning("repeat schedule not found");
             } else {
                 result = new RepeatScheduleV1Dto(
+                    repeatSchedule.getName(), 
                     repeatSchedule.getStartTime(), 
                     repeatSchedule.getFinishTime(), 
                     repeatSchedule.getRepeatBegin(),
@@ -222,6 +229,7 @@ public class RepeatScheduleV1EndPoint {
         
         try {
             for (RepeatScheduleV1Dto repeatScheduleDto : repeatScheduleListContainer.getList()) {
+                String name = repeatScheduleDto.getName();
                 long startTime = repeatScheduleDto.getStartTime();
                 long finishTime = repeatScheduleDto.getFinishTime();
                 long repeatBegin = repeatScheduleDto.getRepeatBegin();
@@ -232,7 +240,7 @@ public class RepeatScheduleV1EndPoint {
                 contain.setDates(repeatScheduleDto.getExcepts());
                 
                 RepeatScheduleResultV1Dto resultThisTime = 
-                        this.createRepeatScheduleWithGId(startTime, finishTime, 
+                        this.createRepeatScheduleWithGId(name, startTime, finishTime, 
                             repeatBegin, repeatEnd, googleId, email, contain);
                 if (!SUCCESS.equals(resultThisTime.getResult())) {
                     result.setResult(FAIL);
