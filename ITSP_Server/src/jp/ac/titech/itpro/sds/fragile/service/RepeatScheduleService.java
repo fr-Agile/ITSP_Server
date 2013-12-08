@@ -103,11 +103,4 @@ public class RepeatScheduleService {
         return true;
     }
     
-    public static RepeatSchedule getRepeatScheduleByKey(String keyS) {
-        try {
-        	return Datastore.query(meta).filter(meta.key.equal(Datastore.stringToKey(keyS))).asSingle();
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
