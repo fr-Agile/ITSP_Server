@@ -3,6 +3,7 @@ package jp.ac.titech.itpro.sds.fragile.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
 import jp.ac.titech.itpro.sds.fragile.meta.UserMeta;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.utils.Encrypter;
@@ -37,6 +38,7 @@ public class UserService {
         map.put("lastName", lastName);
         map.put("email", email);
         map.put("password", encryptedPass);
+        map.put("googleAccount", GoogleConstant.UNTIED_TO_GOOGLE);
         return createUser(map);
     }
     
@@ -74,5 +76,14 @@ public class UserService {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public static User setGoogleAccount(Key key, String googleAccount) {
+        User user = Datastore.get(User.class, key);
+        user.setGoogleAccount(googleAccount);
+        Transaction tx = Datastore.beginTransaction();
+        Datastore.put(user);
+        tx.commit();
+        return user;
     }
 }

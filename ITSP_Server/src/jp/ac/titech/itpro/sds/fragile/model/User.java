@@ -26,6 +26,9 @@ public class User implements Serializable {
     @Attribute(name = "pW")
     private String password;
     
+    @Attribute(name = "gA")
+    private String googleAccount;
+    
     @Attribute(persistent = false)
     private InverseModelListRef<UserGroupMap, User> UserGroupMapListRef =
             new  InverseModelListRef<UserGroupMap, User>(UserGroupMap.class, "user",  this);
@@ -148,6 +151,15 @@ public class User implements Serializable {
     
     public String getUserName() {
         return lastName + " " + firstName;
+    }
+    
+
+    public String getGoogleAccount() {
+        return googleAccount;
+    }
+
+    public void setGoogleAccount(String googleAccount) {
+        this.googleAccount = googleAccount;
     }
     
 }

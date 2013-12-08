@@ -7,6 +7,7 @@ public class UserV1Dto {
     private String firstName;
     private String lastName;
     private String email;
+    private String googleAccount;
     
     public String getFirstName() {
         return firstName;
@@ -25,6 +26,12 @@ public class UserV1Dto {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getGoogleAccount() {
+        return googleAccount;
+    }
+    public void setGoogleAccount(String googleAccount) {
+        this.googleAccount = googleAccount;
     }
     
     @Override

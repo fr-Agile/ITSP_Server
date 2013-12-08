@@ -7,9 +7,11 @@ import javax.inject.Named;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
 import jp.ac.titech.itpro.sds.fragile.utils.AddressChecker;
+import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
 import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.constant.RegisterConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.RegisterV1ResultDto;
+import jp.ac.titech.itpro.sds.fragile.api.dto.UserV1Dto;
 
 import com.google.api.server.spi.config.Api;
 
@@ -63,6 +65,34 @@ public class RegisterV1Endpoint {
         }
         return result;
     }
+    
+    
+    public UserV1Dto setGoogleAccount(
+            @Named("email") String email,
+            @Named("googleAccount") String googleAccount) {
+        UserV1Dto userDto = new UserV1Dto();
+        try {
+            User user = UserService.getUserByEmail(email);
+            if (user == null) {
+                logger.warning("user == null");
+                return null;
+            }
+            User newUser = UserService.setGoogleAccount(user.getKey(), googleAccount);
+            if (newUser != null) {
+                logger.warning("set google account success");
+                CopyUtils.copyUser(userDto, newUser);
+                return userDto;
+            } else {
+                logger.warning("set google account fail");
+                return null;
+            }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+    }
+    
+    
     private void validateFirstName(RegisterV1ResultDto result, String firstName) {
         if (firstName == null) {
             result.setResult(FAIL);
@@ -103,4 +133,5 @@ public class RegisterV1Endpoint {
             result.addError(DIFFERENT_PASS);
         }
     }
+    
 }
