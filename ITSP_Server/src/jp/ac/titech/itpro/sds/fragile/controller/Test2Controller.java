@@ -1,24 +1,28 @@
 package jp.ac.titech.itpro.sds.fragile.controller;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
-import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
-import jp.ac.titech.itpro.sds.fragile.service.UserService;
 
 import org.slim3.controller.Controller;
 import org.slim3.controller.Navigation;
+import org.slim3.datastore.Datastore;
+
+import com.google.appengine.api.datastore.Key;
 
 
 public class Test2Controller extends Controller {
 
     @Override
     public Navigation run() throws Exception {
-        User user = UserService.getUserByEmail("a@a.com");
-        Date day = new Date();
-        List<Schedule> list = ScheduleService.getScheduleByUser(user, day.getTime() - 1000 * 60 * 300, day.getTime() + 1000 * 60 * 600);
+        List<Schedule> all = ScheduleService.getAllSchedule();
+        List<Key> keys = new ArrayList<Key>();
+        for (Schedule s : all) {
+            keys.add(s.getKey());
+        }
+        Datastore.delete(keys);
         return forward("test.jsp");
     }
 }
