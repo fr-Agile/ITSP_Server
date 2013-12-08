@@ -107,7 +107,7 @@ public class RepeatScheduleV1EndPoint {
         }
         return result;
     }
-    
+  
     public RepeatScheduleResultV1Dto editRepeatSchedule(
             @Named("keyS") String keyS,
             @Named("name") String name,
