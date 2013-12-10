@@ -8,5 +8,6 @@ public class CopyUtils {
         dto.setEmail(data.getEmail());
         dto.setFirstName(data.getFirstName());
         dto.setLastName(data.getLastName());
+        dto.setGoogleAccount(data.getGoogleAccount());
     }
 }

@@ -73,11 +73,47 @@ public class GetFriendV1Endpoint {
                     for (Friend friend : friendList) {
                         User friendData = friend.getFriendFrom().getModel();
                         UserV1Dto friendDto = new UserV1Dto();
-                        friendDto.setFirstName(friendData.getFirstName());
-                        friendDto.setLastName(friendData.getLastName());
-                        friendDto.setEmail(friendData.getEmail());
+                        CopyUtils.copyUser(friendDto, friendData);
                         
                         result.addFriend(friendDto);
+                    }
+                    result.setResult(SUCCESS);
+                }
+            }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            result.setResult(FAIL);
+        }
+        return result;
+    }
+
+    @ApiMethod(path = "GetFriendResultDto/getFriendToFrom")
+    public GetFriendResultV1Dto getFriendToFrom(@Named("email") String email) {
+
+        GetFriendResultV1Dto result = new GetFriendResultV1Dto();
+        try {
+            if (email == null) {
+                
+            } else {
+                User user = UserService.getUserByEmail(email);
+                if (user == null) {
+                    result.setResult(FAIL);
+                } else {
+                    List<Friend> friendFromList = FriendService.getFriendFromList(user.getKey());
+                    List<Friend> friendToList = FriendService.getFriendToList(user.getKey());
+                    for (Friend friendFrom : friendFromList) {
+                        User friendFromData = friendFrom.getFriendFrom().getModel();
+
+                        for(Friend friendTo : friendToList) {
+                            User friendToData = friendTo.getFriendTo().getModel();
+
+                            if(friendFromData.getKey().equals(friendToData.getKey())){
+                                UserV1Dto friendDto = new UserV1Dto();
+                                CopyUtils.copyUser(friendDto, friendFromData);
+                                result.addFriend(friendDto);
+                                break;
+                            }
+                        }
                     }
                     result.setResult(SUCCESS);
                 }

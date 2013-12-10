@@ -11,19 +11,18 @@ import javax.inject.Named;
 import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
 import jp.ac.titech.itpro.sds.fragile.api.container.ScheduleListContainer;
-
-import org.slim3.datastore.Datastore;
+import jp.ac.titech.itpro.sds.fragile.api.container.StringListContainer;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.api.dto.ScheduleV1Dto;
-import jp.ac.titech.itpro.sds.fragile.model.Group;
-import jp.ac.titech.itpro.sds.fragile.model.GroupScheduleMap;
+import jp.ac.titech.itpro.sds.fragile.model.Event;
 import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
-import jp.ac.titech.itpro.sds.fragile.service.GroupScheduleMapService;
-import jp.ac.titech.itpro.sds.fragile.service.GroupService;
+import jp.ac.titech.itpro.sds.fragile.service.EventService;
 import jp.ac.titech.itpro.sds.fragile.service.RegisterAndroidService;
 import jp.ac.titech.itpro.sds.fragile.service.ScheduleService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
+
+import org.slim3.datastore.Datastore;
 
 import com.google.api.server.spi.config.Api;
 
@@ -96,11 +95,11 @@ public class ScheduleV1EndPoint {
             @Named("name") String name,
             @Named("startTime") long startTime,
             @Named("finishTime") long finishTime, @Named("email") String email,
-            @Named("groupKey") String groupKey) {
+            StringListContainer container) {
         ScheduleResultV1Dto result = new ScheduleResultV1Dto();
 
         User user = UserService.getUserByEmail(email);
-        Group group = GroupService.getGroup(Datastore.stringToKey(groupKey));
+        List<String> emailList = container.getList();
         try {
             if (startTime < 0 || finishTime < 0) {
                 logger.warning("time should be positive");
@@ -108,18 +107,18 @@ public class ScheduleV1EndPoint {
             } else if (startTime > finishTime) {
                 logger.warning("startTime > finishTime");
                 result.setResult(FAIL);
-            } else if (group == null) {
+            } else if (emailList.size() == 0) {
                 logger.warning("user not found");
                 result.setResult(FAIL);
             } else {
-                GroupScheduleMap groupScheduleMap =
-                    GroupScheduleMapService.createGroupScheduleMap(user, group);
+                Event event =
+                    EventService.createEvent(user);
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("startTime", startTime);
                 map.put("finishTime", finishTime);
 
                 List<Schedule> scheduleList =
-                    ScheduleService.createGroupSchedule(name, map, groupScheduleMap);
+                    ScheduleService.createEvent(name, emailList, event, map);
                 
                 
                 if (scheduleList == null) {

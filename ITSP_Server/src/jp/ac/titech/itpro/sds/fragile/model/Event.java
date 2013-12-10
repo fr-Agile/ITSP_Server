@@ -9,7 +9,7 @@ import org.slim3.datastore.ModelRef;
 import com.google.appengine.api.datastore.Key;
 
 @Model(schemaVersion = 1)
-public class GroupScheduleMap implements Serializable {
+public class Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,13 +21,6 @@ public class GroupScheduleMap implements Serializable {
 
     @Attribute(name = "o")
     private ModelRef<User> owener = new ModelRef<User>(User.class);
-
-    @Attribute(name = "g")
-    private ModelRef<Group> group = new ModelRef<Group>(Group.class);
-
-    public ModelRef<Group> getGroup() {
-        return group;
-    }
 
     public Key getKey() {
         return key;
@@ -61,7 +54,7 @@ public class GroupScheduleMap implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GroupScheduleMap other = (GroupScheduleMap) obj;
+        Event other = (Event) obj;
         if (key == null) {
             if (other.key != null)
                 return false;

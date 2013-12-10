@@ -16,7 +16,7 @@ public class Schedule implements Serializable {
     @Attribute(name = "us")
     private  ModelRef<User> user = new ModelRef<User>(User.class);
     
-    private ModelRef<GroupScheduleMap> groupScheduleMap = new ModelRef<GroupScheduleMap>(GroupScheduleMap.class);
+    private ModelRef<Event> event = new ModelRef<Event>(Event.class);
     
     @Attribute(primaryKey = true)
     private Key key;
@@ -45,8 +45,8 @@ public class Schedule implements Serializable {
         return user;
     }
     
-    public ModelRef<GroupScheduleMap> getGroupScheduleMap() {
-        return groupScheduleMap;
+    public ModelRef<Event> getEvent() {
+        return event;
     }
     
     /**
