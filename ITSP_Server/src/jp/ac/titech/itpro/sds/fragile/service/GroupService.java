@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import jp.ac.titech.itpro.sds.fragile.meta.GroupMeta;
+import jp.ac.titech.itpro.sds.fragile.model.Friend;
 import jp.ac.titech.itpro.sds.fragile.model.Group;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 import jp.ac.titech.itpro.sds.fragile.model.UserGroupMap;
@@ -66,6 +67,17 @@ public class GroupService {
                 .query(meta)
                 .filter(meta.name.equal(name), meta.user.equal(owner.getKey()))
                 .asSingle();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public static List<Group> getGroupList(User owner) {
+        try {
+            return Datastore
+                .query(meta)
+                .filter(meta.user.equal(owner.getKey()))
+                .asList();
         } catch (Exception e) {
             return null;
         }

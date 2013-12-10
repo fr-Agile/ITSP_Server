@@ -76,22 +76,25 @@ public class GroupV1Endpoint {
         }
         return result;
     }
-    public List<GroupV1Dto> getGroupList(@Named("email") String email) {
+  
+    
+    // 自分が作ったグループ一覧を取得
+    public List<GroupV1Dto> getMyGroupList(@Named("email") String email) {
         List<GroupV1Dto> list = new ArrayList<GroupV1Dto>();
         try {
             User user = UserService.getUserByEmail(email);
             if (user == null) {
-                
+                System.out.println("ユーザが見つかりません");
             } else {
-                // userの所属しているグループを取得する
-                List<UserGroupMap> ugmToGroupList = UserGroupMapService.getGroupsByUser(user);
-                if (ugmToGroupList != null) {
-                    for (UserGroupMap ugmToGroup : ugmToGroupList) {
-                        Group group = ugmToGroup.getGroup().getModel();
+                // userがownerであるグループを取得する
+                List<Group> glist = GroupService.getGroupList(user);
+                
+                if (glist != null) {
+                    
+                    for(int i = 0;i<glist.size();++i){
                         List<UserV1Dto> userList = new ArrayList<UserV1Dto>();
                         // グループに所属しているユーザを取得する
-                        List<UserGroupMap> ugmToUserList =
-                                group.getUserGroupMapListRef().getModelList();
+                        List<UserGroupMap> ugmToUserList = glist.get(i).getUserGroupMapListRef().getModelList();
                         if (ugmToUserList != null) {
                             for (UserGroupMap ugmToUser : ugmToUserList) {
                                 UserV1Dto userDto = new UserV1Dto();
@@ -103,10 +106,10 @@ public class GroupV1Endpoint {
                         }
                         // グループの情報をDtoにつめる
                         GroupV1Dto groupDto = new GroupV1Dto();
-                        groupDto.setName(group.getName());
-                        groupDto.setKey(Datastore.keyToString(group.getKey()));
+                        groupDto.setName(glist.get(i).getName());
+                        groupDto.setKey(Datastore.keyToString(glist.get(i).getKey()));
                         UserV1Dto owner = new UserV1Dto();
-                        CopyUtils.copyUser(owner, group.getUser().getModel());
+                        CopyUtils.copyUser(owner, glist.get(i).getUser().getModel());
                         groupDto.setOwner(owner);
                         groupDto.setUserlList(userList);
                         
@@ -115,7 +118,7 @@ public class GroupV1Endpoint {
                 }
             }
         } catch (Exception e) {
-
+            System.out.println(e.toString());
         }
 
         return list;
