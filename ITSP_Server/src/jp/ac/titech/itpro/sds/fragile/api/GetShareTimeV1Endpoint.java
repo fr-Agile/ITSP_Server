@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
@@ -60,7 +61,7 @@ public class GetShareTimeV1Endpoint {
                 if (user == null) {
                     throw new Exception("user not found");
                 }
-                List<Schedule> scheduleList = ScheduleService.getScheduleByUser(user);
+                List<Schedule> scheduleList = ScheduleService.getScheduleByUser(user, startTime, finishTime);
                 // repeatScheduleをscheduleに変換して追加
                 List<RepeatSchedule> repeatSchedules = 
                         RepeatScheduleService.getRepeatScheduleByUser(user);
@@ -89,21 +90,32 @@ public class GetShareTimeV1Endpoint {
     private void addRepeatSchedule(List<Schedule> scheduleList,
             List<RepeatSchedule> repeatSchedules, long startTime, long finishTime, User user) {
         // start, finishをCalendar型に変換
-        Calendar startDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
         startDate.setTimeInMillis(startTime);
-        Calendar finishDate = Calendar.getInstance();
-        startDate.setTimeInMillis(finishTime);
+        Calendar finishDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
+        finishDate.setTimeInMillis(finishTime);
         // startの週の日曜日, finishの週の土曜日を求める
-        Calendar startSun = (Calendar) startDate.clone();
-        startSun.add(Calendar.DAY_OF_MONTH, -(startDate.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY));
-        Calendar finishSat = (Calendar) finishDate.clone();
-        finishSat.add(Calendar.DAY_OF_MONTH, -(finishDate.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY) + 6);
+        
+		Calendar startSun = (Calendar) startDate.clone();
+		int dayOfWeek = startDate.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY;
+		
+		startSun.add(Calendar.DAY_OF_MONTH, -dayOfWeek);
+		startSun.set(Calendar.HOUR_OF_DAY, 0);
+		startSun.set(Calendar.MINUTE, 0);
+		startSun.set(Calendar.SECOND, 0);
+		startSun.set(Calendar.MILLISECOND, 0);
+
+		Calendar finishSat = (Calendar) finishDate.clone();
+		dayOfWeek = finishDate.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY;
+		
+		finishSat.add(Calendar.DAY_OF_MONTH, -dayOfWeek + 6);
+		finishSat.set(Calendar.HOUR_OF_DAY, 23);
+		finishSat.set(Calendar.MINUTE, 59);
+		finishSat.set(Calendar.SECOND, 59);
+		finishSat.set(Calendar.MILLISECOND, 999);
+       
         
         Calendar sun = (Calendar) startSun.clone();
-        sun.set(Calendar.HOUR_OF_DAY, 0);
-        sun.set(Calendar.MINUTE, 0);
-        sun.set(Calendar.SECOND, 0);
-        sun.set(Calendar.MILLISECOND, 0);
         // startの週の日曜から順に追加していく
         while (sun.getTimeInMillis() < finishSat.getTimeInMillis()) {
             for (RepeatSchedule repeat : repeatSchedules) {
@@ -115,15 +127,18 @@ public class GetShareTimeV1Endpoint {
                     // 日曜からのずれを足し込む
                     start.add(Calendar.DAY_OF_MONTH, day);
                     finish.add(Calendar.DAY_OF_MONTH, day);
-                    // 時間を設定する
-                    start.add(Calendar.MILLISECOND, (int) repeat.getStartTime());
-                    finish.add(Calendar.MILLISECOND, (int) repeat.getFinishTime());
-                    // Schedule型を作成しリストに追加する
-                    Schedule schedule = new Schedule();
-                    schedule.getUser().setModel(user);
-                    schedule.setStartTime(start.getTimeInMillis());
-                    schedule.setFinishTime(finish.getTimeInMillis());
-                    scheduleList.add(schedule);
+                    if ((start.getTimeInMillis() >= repeat.getRepeatBegin()) &&
+                            (finish.getTimeInMillis() <= repeat.getRepeatEnd())) {
+                        // 時間を設定する
+                        start.add(Calendar.MILLISECOND, (int) repeat.getStartTime());
+                        finish.add(Calendar.MILLISECOND, (int) repeat.getFinishTime());
+                        // Schedule型を作成しリストに追加する
+                        Schedule schedule = new Schedule();
+                        schedule.getUser().setModel(user);
+                        schedule.setStartTime(start.getTimeInMillis());
+                        schedule.setFinishTime(finish.getTimeInMillis());
+                        scheduleList.add(schedule);
+                    }
                 }
             }
             // 一週間ずつずらす
@@ -198,12 +213,13 @@ public class GetShareTimeV1Endpoint {
         GroupScheduleV1Dto current = new GroupScheduleV1Dto();
         current.setStartTime(startTime);
         
+        try {
         for (ScheduleChangedTime sct : sctList) {
             long sctTime = sct.getTime();
             if(finishTime <= sctTime) {
                 break;
             }
-            else if (current.getStartTime() < sctTime) {
+            else if (current.getStartTime() < sctTime) {	// 最初はスキップされる
                 current.setFinishTime(sctTime);
                 current.addAllUser(busyUsers);
                 gsList.add(current);
@@ -223,6 +239,9 @@ public class GetShareTimeV1Endpoint {
         current.setFinishTime(finishTime);
         current.addAllUser(busyUsers);
         gsList.add(current);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
         
         return gsList;
     }

@@ -136,7 +136,7 @@ public class GroupV1Endpoint {
         return list;
     }
     
-    public GroupResultV1Dto deleteGroup(@Named("key") String keyS) {
+    public GroupResultV1Dto deleteGroup(@Named("keyS") String keyS) {
 
         GroupResultV1Dto result = new GroupResultV1Dto();
         
