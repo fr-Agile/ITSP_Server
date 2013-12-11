@@ -4,6 +4,8 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
+import org.slim3.datastore.Datastore;
+
 import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.constant.FriendConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.FriendResultV1Dto;
@@ -59,6 +61,33 @@ public class FriendV1Endpoint {
 
                 }
             }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            result.setResult(FAIL);
+        }
+        return result;
+    }
+    
+    public FriendResultV1Dto DeleteFriend(@Named("toemail") String toemail,
+            @Named("fromemail") String fromemail) {
+        
+        FriendResultV1Dto result = new FriendResultV1Dto();
+    
+        try {
+            User to = UserService.getUserByEmail(toemail);
+            User from = UserService.getUserByEmail(fromemail);
+            
+            if((to != null)&&(from != null)){
+                Friend f1 = FriendService.getFriend(to.getKey(), from.getKey());
+                Friend f2 = FriendService.getFriend(from.getKey(), to.getKey());
+                if(f1 != null){
+                  FriendService.deleteFriend(Datastore.keyToString(f1.getKey()));
+                }
+                if(f2 != null){
+                  FriendService.deleteFriend(Datastore.keyToString(f2.getKey()));
+                }
+            }
+            result.setResult(SUCCESS);
         } catch (Exception e) {
             logger.warning(e.getMessage());
             result.setResult(FAIL);

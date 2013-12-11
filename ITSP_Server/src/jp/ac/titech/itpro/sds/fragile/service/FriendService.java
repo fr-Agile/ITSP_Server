@@ -43,6 +43,23 @@ public class FriendService {
             return false;
         }
     }
+    
+    public static Friend getFriend(Key from, Key to) {
+        try {
+            return Datastore
+                    .query(meta)
+                    .filter(meta.friendTo.equal(to), meta.friendFrom.equal(from))
+                    .asSingle();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public static boolean deleteFriend(String keyS) {
+        Key key = Datastore.stringToKey(keyS);
+        Datastore.delete(key);
+        return true;
+    }
 
     public static List<Friend> getFriendToList(Key a) {
         try {
