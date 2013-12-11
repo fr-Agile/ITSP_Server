@@ -23,6 +23,7 @@ import jp.ac.titech.itpro.sds.fragile.service.UserService;
 import jp.ac.titech.itpro.sds.fragile.utils.CopyUtils;
 
 import com.google.api.server.spi.config.Api;
+import com.google.appengine.api.datastore.Key;
 
 @Api(name = "groupEndpoint", version = "v1")
 public class GroupV1Endpoint {
@@ -35,6 +36,7 @@ public class GroupV1Endpoint {
     private static String NULLNAME = "nullname";
     private static String NULLOWNER = "nullowner";
     private static String ALREADYGROUP = "alreadygroup";
+    private static String NOGROUP = "nogroup";
 
     public GroupResultV1Dto makeGroup(StringListContainer emailContainer,
             @Named("name") String name, @Named("owner") String owner) {
@@ -132,5 +134,27 @@ public class GroupV1Endpoint {
         }
 
         return list;
+    }
+    
+    public GroupResultV1Dto deleteGroup(@Named("key") String keyS) {
+
+        GroupResultV1Dto result = new GroupResultV1Dto();
+        
+        try {
+            Key key = Datastore.stringToKey(keyS);
+            Group group = GroupService.getGroup(key);
+            
+            if (group != null) {
+                UserGroupMapService.deleteMapByGroup(group);
+                GroupService.deleteGroup(keyS);
+                result.setResult(SUCCESS);
+            } else {
+                result.setResult(NOGROUP);                               
+            }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            result.setResult(FAIL);
+        }
+        return result;
     }
 }

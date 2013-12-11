@@ -72,6 +72,12 @@ public class GroupService {
         }
     }
     
+    public static boolean deleteGroup(String keyS) {
+        Key key = Datastore.stringToKey(keyS);
+        Datastore.delete(key);
+        return true;
+    }
+    
     public static List<Group> getGroupList(User owner) {
         try {
             return Datastore
