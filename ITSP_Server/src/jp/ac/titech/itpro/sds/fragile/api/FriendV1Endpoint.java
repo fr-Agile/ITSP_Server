@@ -10,6 +10,7 @@ import jp.ac.titech.itpro.sds.fragile.api.constant.CommonConstant;
 import jp.ac.titech.itpro.sds.fragile.api.constant.FriendConstant;
 import jp.ac.titech.itpro.sds.fragile.api.dto.FriendResultV1Dto;
 import jp.ac.titech.itpro.sds.fragile.model.User;
+import jp.ac.titech.itpro.sds.fragile.service.RegisterAndroidService;
 import jp.ac.titech.itpro.sds.fragile.service.UserService;
 import jp.ac.titech.itpro.sds.fragile.model.Friend;
 import jp.ac.titech.itpro.sds.fragile.service.FriendService;
@@ -86,6 +87,9 @@ public class FriendV1Endpoint {
                 if(f2 != null){
                   FriendService.deleteFriend(Datastore.keyToString(f2.getKey()));
                 }
+                // toに対しプッシュ通知を送る
+                String regId = RegisterAndroidService.getRegisterIdFromUser(to);
+                RegisterAndroidService.sendMessageFromRegisterId(regId, "delFriend", fromemail);
             }
             result.setResult(SUCCESS);
         } catch (Exception e) {
