@@ -26,6 +26,7 @@ public class FriendV1Endpoint {
     private static final String NULLMY = FriendConstant.NULLMY;
     private static final String NOFRIEND = FriendConstant.NOFRIEND;
     private static final String ALREADY = FriendConstant.ALREADY;
+    private static final String MINE = FriendConstant.MINE;
 
     public FriendResultV1Dto Friendship(@Named("email") String email,
             @Named("myemail") String myemail) {
@@ -35,6 +36,8 @@ public class FriendV1Endpoint {
         try {
             if (email == null){ 
                 result.setResult(FAIL);
+            }else if(email.equals(myemail)){
+                result.setResult(MINE);
             }else if(myemail == null){
                 result.setResult(NULLMY);
             } else {
