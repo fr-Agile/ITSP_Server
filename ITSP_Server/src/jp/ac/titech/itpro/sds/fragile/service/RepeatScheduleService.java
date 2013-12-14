@@ -7,7 +7,6 @@ import java.util.Map;
 import jp.ac.titech.itpro.sds.fragile.api.constant.GoogleConstant;
 import jp.ac.titech.itpro.sds.fragile.meta.RepeatScheduleMeta;
 import jp.ac.titech.itpro.sds.fragile.model.RepeatSchedule;
-import jp.ac.titech.itpro.sds.fragile.model.Schedule;
 import jp.ac.titech.itpro.sds.fragile.model.User;
 
 import org.slim3.datastore.Datastore;
@@ -18,8 +17,9 @@ import com.google.appengine.api.datastore.Transaction;
 
 public class RepeatScheduleService {
     private static RepeatScheduleMeta meta = RepeatScheduleMeta.get();
-    
-    public static RepeatSchedule createRepeatSchedule(Map<String, Object> input, User user){
+
+    public static RepeatSchedule createRepeatSchedule(
+            Map<String, Object> input, User user) {
         RepeatSchedule repeatSchedule = new RepeatSchedule();
         Key key = Datastore.allocateId(RepeatSchedule.class);
         BeanUtil.copy(input, repeatSchedule);
@@ -30,29 +30,48 @@ public class RepeatScheduleService {
         tx.commit();
         return repeatSchedule;
     }
-    
+
+    public static RepeatSchedule createRepeatSchedule(String name,
+            long startTime, long finishTime, List<Integer> repeatDays, User user) {
+        Map<String, Object> map = new java.util.HashMap<String, Object>();
+        map.put("name", name);
+        map.put("startTime", startTime);
+        map.put("finishTime", finishTime);
+        map.put("repeatDays", repeatDays);
+        map.put("repeatBegin", 0);
+        map.put("repeatEnd", 1390000000000l);
+        return createRepeatSchedule(map, user);
+    }
+
     public static List<RepeatSchedule> getRepeatScheduleByUser(User user) {
         try {
-            return Datastore.query(meta).filter(meta.user.equal(user.getKey())).asList();
+            return Datastore
+                .query(meta)
+                .filter(meta.user.equal(user.getKey()))
+                .asList();
         } catch (Exception e) {
             return null;
         }
     }
-    
+
     public static List<RepeatSchedule> getGoogleRepeatScheduleByUser(User user) {
         try {
-            return Datastore.query(meta)
-            		.filter(meta.user.equal(user.getKey()))
-            		.filterInMemory(meta.googleId.notEqual(GoogleConstant.UNTIED_TO_GOOGLE))
-            		.asList();
+            return Datastore
+                .query(meta)
+                .filter(meta.user.equal(user.getKey()))
+                .filterInMemory(
+                    meta.googleId.notEqual(GoogleConstant.UNTIED_TO_GOOGLE))
+                .asList();
         } catch (Exception e) {
             return null;
         }
     }
-    
-    public static void editRepeatSchedule(String keyS,String name,Long startTime,Long finishTime,List<Integer> repeatDays,List<Date> excepts) {
+
+    public static void editRepeatSchedule(String keyS, String name,
+            Long startTime, Long finishTime, List<Integer> repeatDays,
+            List<Date> excepts) {
         Key key = Datastore.stringToKey(keyS);
-        RepeatSchedule rs = Datastore.get(RepeatSchedule.class,key);
+        RepeatSchedule rs = Datastore.get(RepeatSchedule.class, key);
         rs.setName(name);
         rs.setStartTime(startTime);
         rs.setFinishTime(finishTime);
@@ -60,10 +79,12 @@ public class RepeatScheduleService {
         rs.setExcepts(excepts);
         Datastore.put(rs);
     }
-    
-    public static void editRepeatSchedule(String keyS,String name,Long startTime,Long finishTime, List<Integer> repeatDays,List<Date> excepts, String googleId) {
+
+    public static void editRepeatSchedule(String keyS, String name,
+            Long startTime, Long finishTime, List<Integer> repeatDays,
+            List<Date> excepts, String googleId) {
         Key key = Datastore.stringToKey(keyS);
-        RepeatSchedule rs = Datastore.get(RepeatSchedule.class,key);
+        RepeatSchedule rs = Datastore.get(RepeatSchedule.class, key);
         rs.setName(name);
         rs.setStartTime(startTime);
         rs.setFinishTime(finishTime);
@@ -73,34 +94,33 @@ public class RepeatScheduleService {
         Datastore.put(rs);
     }
 
-    public static List<RepeatSchedule> getRepeatScheduleByUser(User user, Long startTime, Long finishTime) {
+    public static List<RepeatSchedule> getRepeatScheduleByUser(User user,
+            Long startTime, Long finishTime) {
         try {
-            return Datastore.query(meta)
-                    .filter(meta.user.equal(user.getKey()))
-                    .filterInMemory(meta.startTime.greaterThanOrEqual(startTime))
-                    .filterInMemory(meta.finishTime.lessThanOrEqual(finishTime))
-                    .asList();
+            return Datastore
+                .query(meta)
+                .filter(meta.user.equal(user.getKey()))
+                .filterInMemory(meta.startTime.greaterThanOrEqual(startTime))
+                .filterInMemory(meta.finishTime.lessThanOrEqual(finishTime))
+                .asList();
         } catch (Exception e) {
             return null;
         }
     }
-    
+
     public static RepeatSchedule getRepeatScheduleByKey(String keyS) {
         try {
-        	Key key = Datastore.stringToKey(keyS);
-            return Datastore.query(meta)
-                    .filter(meta.key.equal(key))
-                    .asSingle();
+            Key key = Datastore.stringToKey(keyS);
+            return Datastore.query(meta).filter(meta.key.equal(key)).asSingle();
         } catch (Exception e) {
             return null;
         }
     }
-    
-    
+
     public static boolean deleteRepeatSchedule(String keyS) {
         Key key = Datastore.stringToKey(keyS);
         Datastore.delete(key);
         return true;
     }
-    
+
 }

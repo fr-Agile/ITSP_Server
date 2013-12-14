@@ -33,6 +33,14 @@ public class ScheduleService {
         return schedule;
     }
 
+    public static Schedule createSchedule(String name,
+            long startTime, long finishTime, User user) {
+        Map<String, Object> map = new java.util.HashMap<String, Object>();
+        map.put("startTime", startTime);
+        map.put("finishTime", finishTime);
+        return createSchedule(name, map, user);
+    }
+    
     public static List<Schedule> createEvent(String name,
             List<String> emailList, Event event, Map<String, Object> input) {
         List<Schedule> scheduleList = new ArrayList<Schedule>();
