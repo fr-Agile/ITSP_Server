@@ -33,10 +33,13 @@ public class GroupV1Endpoint {
     private static String SUCCESS = "success";
     private static String FAIL = "fail";
 
+    private static String NOMEMBER = "nomember";
     private static String NULLNAME = "nullname";
     private static String NULLOWNER = "nullowner";
     private static String ALREADYGROUP = "alreadygroup";
     private static String NOGROUP = "nogroup";
+    private static String SHORT = "short";
+    private static String LONG = "long";
 
     public GroupResultV1Dto makeGroup(StringListContainer emailContainer,
             @Named("name") String name, @Named("owner") String owner) {
@@ -47,11 +50,15 @@ public class GroupV1Endpoint {
 
         try {
             if (emails.size() <= 0) {
-                result.setResult(FAIL);
+                result.setResult(NOMEMBER);
             } else if (name == null) {
                 result.setResult(NULLNAME);
             } else if (owner == null) {
                 result.setResult(NULLOWNER);
+            } else if (name.length()<4){
+                result.setResult(SHORT);
+            }else if (name.length()>20){
+                result.setResult(LONG);
             } else {
                 Group group =
                     GroupService.getGroup(
@@ -157,4 +164,34 @@ public class GroupV1Endpoint {
         }
         return result;
     }
+    /*
+    public GroupResultV1Dto deleteMember(@Named("owner") String owner, @Named("friend") String friend){
+        
+        GroupResultV1Dto result = new GroupResultV1Dto();
+        
+        try{
+        
+            User o = UserService.getUserByEmail(owner);
+        
+            List<Group> groups = GroupService.getAllGroupByOwner(o);
+        
+            for (Group group : groups) {
+                List<UserGroupMap> maps = UserGroupMapService.getUsersByGroup(group);
+                for (UserGroupMap map : maps) {
+                    if(map.getUser().getModel().getEmail().equals(friend)){
+                        if(maps.size()<=2){
+                            GroupService.deleteGroup(group.getKey().toString());
+                        }
+                        UserGroupMapService.deleteMap(map.getKey().toString());
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            result.setResult(FAIL);
+        }
+        return result;
+    }
+    */
 }
